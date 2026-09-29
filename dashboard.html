@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050812">
+<title>Dashboard • GOPI ONLINE SERVICE</title>
+<style>
+:root{--bg:#050812;--text:#f7f9ff;--muted:#98a3bd;--line:rgba(255,255,255,.1);--v:#8b5cf6;--c:#22d3ee;--r:#ff5f7e}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at 12% 8%,#8b5cf622,transparent 30%),radial-gradient(circle at 90% 15%,#22d3ee18,transparent 28%),linear-gradient(145deg,#03040a,#090d1b 55%,#04060d);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;background-image:linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:42px 42px}
+.orb{position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.35;animation:float 11s ease-in-out infinite alternate}.o1{width:300px;height:300px;background:#8b5cf6;left:-140px;top:-100px}.o2{width:260px;height:260px;background:#22d3ee;right:-120px;bottom:-80px;animation-delay:-4s}@keyframes float{to{transform:translate(45px,-30px) scale(1.08)}}
+.shell{width:min(1080px,92%);margin:auto;padding:24px 0 40px;position:relative;z-index:1}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.brand{display:flex;gap:12px;align-items:center}.logo{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;font-weight:900;background:linear-gradient(135deg,var(--v),var(--c));box-shadow:0 0 35px #8b5cf644}.brand b{display:block;font-size:14px;letter-spacing:.13em}.brand small{color:var(--muted);font-size:10px;letter-spacing:.08em}
+.tools{display:flex;gap:9px;align-items:center}.notice,.logout{height:46px;border-radius:15px;cursor:pointer;transition:.25s}.notice{width:46px;border:1px solid var(--line);background:#ffffff09;color:#fff;position:relative}.notice:hover,.logout:hover{transform:translateY(-2px)}.dot{position:absolute;right:0;top:-2px;width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 13px var(--c)}
+.logout{padding:0 15px;border:1px solid #ff5f7e40;color:#ffdce4;background:linear-gradient(135deg,#ff5f7e18,#8b5cf608);font-size:10px;font-weight:900;letter-spacing:.07em;box-shadow:0 0 25px #ff5f7e08}.logout:hover{border-color:#ff5f7e99;box-shadow:0 0 30px #ff5f7e20}
+.hero{border:1px solid var(--line);border-radius:30px;padding:42px;background:linear-gradient(145deg,#151b31c7,#080c18dc);box-shadow:0 28px 80px #00000070;backdrop-filter:blur(24px);position:relative;overflow:hidden;animation:up .7s ease both}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,#ffffff08 45%,transparent 62%);transform:translateX(-120%);animation:sweep 8s infinite}@keyframes sweep{72%{transform:translateX(120%)}100%{transform:translateX(120%)}}@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:11px;color:#b6bfd4;letter-spacing:.16em;text-transform:uppercase}h1{font-size:clamp(32px,5vw,58px);letter-spacing:-.05em;margin:12px 0}h1 span{background:linear-gradient(90deg,#fff,#c4b5fd,#67e8f9);-webkit-background-clip:text;color:transparent}.sub{max-width:650px;color:var(--muted);line-height:1.65;font-size:14px}.profile{display:flex;gap:13px;align-items:center;margin-top:25px}.avatar{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#8b5cf6,#22d3ee);font-weight:900;box-shadow:0 0 35px #8b5cf644}.profile b{display:block}.profile small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
+  margin-top:28px
+}
+
+.action.documents:before{
+  background:#a855f744;
+}
+
+.action.documents .arrow{
+  color:#c084fc;
+}
+
+.action.documents:hover{
+  border-color:#a855f766;
+  box-shadow:
+    0 25px 55px #0008,
+    0 0 45px #a855f72b,
+    inset 0 0 25px #a855f708;
+}.action{min-height:145px;padding:25px;border:1px solid var(--line);border-radius:22px;text-decoration:none;color:#fff;position:relative;overflow:hidden;background:#ffffff06;transition:.35s;display:flex;align-items:flex-end}.action:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;right:-75px;top:-90px;filter:blur(45px);background:#8b5cf644}.action.services:before{background:#22d3ee44}.action:hover{transform:translateY(-7px);border-color:#ffffff2b;box-shadow:0 25px 55px #0008,0 0 35px #8b5cf61c}.action h2{margin:0;font-size:20px}.action p{margin:6px 0 0;color:var(--muted);font-size:11px}.arrow{position:absolute;right:22px;bottom:20px;font-size:22px;color:#c4b5fd}.services .arrow{color:#67e8f9}
+.footer{display:flex;justify-content:space-between;color:#65718b;font-size:10px;padding-top:20px}
+.panel{position:fixed;right:4%;top:80px;width:min(350px,90vw);padding:17px;border:1px solid var(--line);border-radius:20px;background:#090e1bf2;backdrop-filter:blur(22px);box-shadow:0 25px 80px #0009;opacity:0;visibility:hidden;transform:translateY(-8px);transition:.25s;z-index:5}.panel.open{opacity:1;visibility:visible;transform:none}.panel b{font-size:13px}.panel p{color:var(--muted);font-size:11px;line-height:1.5}
+.modal{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:#02040aaa;backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:.25s;z-index:20}.modal.open{opacity:1;visibility:visible}.box{width:min(400px,92vw);padding:25px;border-radius:24px;border:1px solid #ffffff16;background:linear-gradient(145deg,#151b30f5,#070a14f8);box-shadow:0 30px 100px #000b,0 0 50px #ff5f7e12;transform:translateY(14px) scale(.97);transition:.3s}.modal.open .box{transform:none}.box h3{margin:0;font-size:20px}.box p{color:var(--muted);font-size:12px;line-height:1.6}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.mbtn{height:44px;border-radius:13px;border:1px solid var(--line);background:#ffffff08;color:#fff;font-weight:900;font-size:10px;cursor:pointer}.confirm{border:0;background:linear-gradient(100deg,#ff5278,#d946ef,#805cf6);background-size:180%;animation:grad 4s infinite;box-shadow:0 12px 30px #ff527833}@keyframes grad{50%{background-position:100%}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);opacity:0;padding:11px 16px;border:1px solid var(--line);border-radius:13px;background:#0a0f1df5;z-index:30;font-size:11px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:650px){.shell{width:94%;padding-top:17px}.hero{padding:29px 20px}.actions{grid-template-columns:1fr}.footer{flex-direction:column;gap:5px}.logout{width:46px;padding:0}.logout span{display:none}}@media(max-width:420px){.modal-actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div>
+<main class="shell">
+<header class="top">
+<div class="brand"><div class="logo">G</div><div><b>GOPI ONLINE SERVICE</b><small>PREMIUM DIGITAL SERVICE</small></div></div>
+<div class="tools">
+<button class="notice" id="notice" aria-label="Notifications">♢<i class="dot" id="dot"></i></button>
+<button class="logout" id="logout"><span>LOG OUT</span> ⇥</button>
+</div>
+</header>
+<section class="hero">
+<div class="eyebrow">Member Dashboard</div>
+<h1>Welcome back, <span id="name">Member</span>.</h1>
+<p class="sub">Your personal service space is ready. Manage your orders and explore available services from one premium dashboard.</p>
+<div class="profile"><div class="avatar" id="avatar">M</div><div><b id="pname">Member</b><small id="email">Loading account...</small></div></div>
+<div class="actions">
+<div class="actions">
+
+  <a class="action" href="orders.html">
+
+    <div>
+      <h2>MY ORDERS</h2>
+      <p>Track and manage your service orders</p>
+    </div>
+
+    <span class="arrow">↗</span>
+
+  </a>
+
+
+  <a class="action services" href="services.html">
+
+    <div>
+      <h2>SERVICE'S</h2>
+      <p>Discover and request available services</p>
+    </div>
+
+    <span class="arrow">↗</span>
+
+  </a>
+
+
+  <a class="action documents" href="documents.html">
+
+    <div>
+      <h2>MY DOCUMENTS</h2>
+      <p>Securely upload and manage your documents</p>
+    </div>
+
+    <span class="arrow">↗</span>
+
+  </a>
+
+</div>
+</section>
+<footer class="footer"><span>© 2026 GOPI ONLINE SERVICE</span><span>SECURE • PREMIUM • SIMPLE</span></footer>
+</main>
+
+<div class="panel" id="panel"><b>Notifications</b><p>Your account is ready. New service updates will appear here.</p></div>
+
+<div class="modal" id="modal" aria-hidden="true">
+<div class="box"><h3>Log out of your account?</h3><p>Your current session will be securely ended. You can sign in again anytime.</p>
+<div class="modal-actions"><button class="mbtn" id="cancel">CANCEL</button><button class="mbtn confirm" id="confirm">YES, LOG OUT</button></div></div>
+</div>
+<div class="toast" id="toast">Signing out securely…</div>
+
+<script type="module">
+import {supabase} from "./supabase.js";
+const $=id=>document.getElementById(id);
+function getName(u){return u?.user_metadata?.full_name?.trim()||(u?.email||"Member").split("@")[0]||"Member"}
+function initials(n){return n.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"M"}
+async function load(){
+ const {data,error}=await supabase.auth.getSession();
+ if(error||!data.session?.user){location.replace("index.html");return}
+ const u=data.session.user,n=getName(u);$("name").textContent=n;$("pname").textContent=n;$("email").textContent=u.email||"Verified account";$("avatar").textContent=initials(n)
+}
+await load();
+$("notice").onclick=()=>{$("panel").classList.toggle("open");$("dot").style.display="none"};
+document.addEventListener("click",e=>{if(!e.target.closest("#notice")&&!e.target.closest("#panel"))$("panel").classList.remove("open")});
+$("logout").onclick=()=>{$("modal").classList.add("open");$("modal").setAttribute("aria-hidden","false")};
+$("cancel").onclick=()=>{$("modal").classList.remove("open");$("modal").setAttribute("aria-hidden","true")};
+$("modal").onclick=e=>{if(e.target===$("modal"))$("cancel").click()};
+$("confirm").onclick=async()=>{
+ const b=$("confirm");b.disabled=true;b.textContent="LOGGING OUT…";$("toast").classList.add("show");
+ const {error}=await supabase.auth.signOut();
+ if(error){b.disabled=false;b.textContent="YES, LOG OUT";$("toast").textContent="Logout failed. Please try again.";setTimeout(()=>$("toast").classList.remove("show"),2200);return}
+ location.replace("index.html");
+};
+supabase.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT"||!session)location.replace("index.html")});
+</script>
+</body>
+</html>

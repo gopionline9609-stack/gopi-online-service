@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GOPI ONLINE SERVICE</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    :root {
+      --blue: #1769ff;
+      --blue-light: #5ca9ff;
+      --blue-soft: #8bc4ff;
+      --white: #ffffff;
+      --text: #f5f9ff;
+      --muted: #8b9bb3;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(23, 105, 255, 0.20),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 90% 80%,
+          rgba(0, 153, 255, 0.17),
+          transparent 30%
+        ),
+        linear-gradient(
+          145deg,
+          #020611,
+          #06101f 48%,
+          #020611
+        );
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      position: relative;
+    }
+
+    /* ===============================
+       PREMIUM BACKGROUND GRID
+    =============================== */
+
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      background-image:
+        linear-gradient(
+          rgba(130, 180, 255, 0.025) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(130, 180, 255, 0.025) 1px,
+          transparent 1px
+        );
+
+      background-size: 45px 45px;
+
+      mask-image:
+        radial-gradient(
+          circle at center,
+          black,
+          transparent 80%
+        );
+
+      pointer-events: none;
+    }
+
+    /* ===============================
+       BLUE LIGHT ORBS
+    =============================== */
+
+    .orb {
+      position: fixed;
+
+      border-radius: 50%;
+
+      pointer-events: none;
+
+      filter: blur(75px);
+
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 280px;
+      height: 280px;
+
+      left: -120px;
+      top: -100px;
+
+      background: rgba(23, 105, 255, 0.25);
+
+      animation:
+        floatOne 9s ease-in-out infinite alternate;
+    }
+
+    .orb-2 {
+      width: 250px;
+      height: 250px;
+
+      right: -110px;
+      bottom: -100px;
+
+      background: rgba(0, 174, 255, 0.20);
+
+      animation:
+        floatTwo 11s ease-in-out infinite alternate;
+    }
+
+    .orb-3 {
+      width: 120px;
+      height: 120px;
+
+      left: 8%;
+      top: 55%;
+
+      background: rgba(80, 150, 255, 0.12);
+
+      animation:
+        floatThree 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatOne {
+      to {
+        transform:
+          translate(110px, 80px)
+          scale(1.25);
+      }
+    }
+
+    @keyframes floatTwo {
+      to {
+        transform:
+          translate(-100px, -80px)
+          scale(1.3);
+      }
+    }
+
+    @keyframes floatThree {
+      to {
+        transform:
+          translate(130px, -70px)
+          scale(1.2);
+      }
+    }
+
+    /* ===============================
+       PARTICLES
+    =============================== */
+
+    .particles {
+      position: fixed;
+      inset: 0;
+
+      overflow: hidden;
+
+      pointer-events: none;
+
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+
+      width: 3px;
+      height: 3px;
+
+      border-radius: 50%;
+
+      background: #8bc4ff;
+
+      box-shadow:
+        0 0 7px #4b9cff,
+        0 0 18px rgba(40, 130, 255, .8);
+
+      opacity: 0;
+
+      animation:
+        particleMove linear infinite;
+    }
+
+    .particle:nth-child(1) {
+      left: 8%;
+      animation-duration: 8s;
+      animation-delay: 1s;
+    }
+
+    .particle:nth-child(2) {
+      left: 18%;
+      animation-duration: 11s;
+      animation-delay: 3s;
+    }
+
+    .particle:nth-child(3) {
+      left: 30%;
+      animation-duration: 9s;
+      animation-delay: 0s;
+    }
+
+    .particle:nth-child(4) {
+      left: 43%;
+      animation-duration: 12s;
+      animation-delay: 4s;
+    }
+
+    .particle:nth-child(5) {
+      left: 58%;
+      animation-duration: 10s;
+      animation-delay: 2s;
+    }
+
+    .particle:nth-child(6) {
+      left: 72%;
+      animation-duration: 13s;
+      animation-delay: 5s;
+    }
+
+    .particle:nth-child(7) {
+      left: 88%;
+      animation-duration: 9s;
+      animation-delay: 1s;
+    }
+
+    @keyframes particleMove {
+      0% {
+        transform:
+          translateY(110vh)
+          scale(.2);
+
+        opacity: 0;
+      }
+
+      15% {
+        opacity: .8;
+      }
+
+      70% {
+        opacity: .55;
+      }
+
+      100% {
+        transform:
+          translateY(-20vh)
+          translateX(60px)
+          scale(1.5);
+
+        opacity: 0;
+      }
+    }
+
+    /* ===============================
+       MAIN CONTAINER
+    =============================== */
+
+    .container {
+      width: min(92%, 470px);
+
+      padding: 25px 0;
+
+      position: relative;
+
+      z-index: 5;
+
+      animation:
+        pageEnter 1s cubic-bezier(.2,.8,.2,1);
+    }
+
+    @keyframes pageEnter {
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(45px)
+          scale(.94);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateY(0)
+          scale(1);
+      }
+    }
+
+    /* ===============================
+       BRAND
+    =============================== */
+
+    .brand {
+      text-align: center;
+
+      margin-bottom: 25px;
+    }
+
+    .logo-wrap {
+      width: 82px;
+      height: 82px;
+
+      margin: auto;
+
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-ring {
+      position: absolute;
+
+      inset: 0;
+
+      border-radius: 27px;
+
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent,
+          #1684ff,
+          #9bd0ff,
+          #1769ff,
+          transparent
+        );
+
+      animation:
+        rotateLogo 4.5s linear infinite;
+
+      filter:
+        drop-shadow(
+          0 0 10px rgba(40,130,255,.75)
+        );
+    }
+
+    .logo-ring::after {
+      content: "";
+
+      position: absolute;
+
+      inset: 2px;
+
+      border-radius: 25px;
+
+      background: #06101e;
+    }
+
+    @keyframes rotateLogo {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .logo {
+      width: 65px;
+      height: 65px;
+
+      border-radius: 21px;
+
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 24px;
+      font-weight: 900;
+
+      color: #ffffff;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.16),
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid rgba(160,210,255,.35);
+
+      box-shadow:
+        inset 0 0 25px rgba(70,150,255,.12),
+        0 0 30px rgba(30,120,255,.22);
+
+      animation:
+        logoGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes logoGlow {
+      0%, 100% {
+        box-shadow:
+          inset 0 0 25px rgba(70,150,255,.10),
+          0 0 25px rgba(30,120,255,.18);
+      }
+
+      50% {
+        box-shadow:
+          inset 0 0 35px rgba(70,150,255,.20),
+          0 0 48px rgba(30,120,255,.40);
+      }
+    }
+
+    .brand h1 {
+      margin-top: 17px;
+
+      font-size:
+        clamp(21px, 6vw, 28px);
+
+      font-weight: 800;
+
+      letter-spacing: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #ffffff,
+          #a9d5ff,
+          #ffffff,
+          #5ba9ff,
+          #ffffff
+        );
+
+      background-size: 300% auto;
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      animation:
+        brandShine 5s linear infinite;
+    }
+
+    @keyframes brandShine {
+      to {
+        background-position: 300% center;
+      }
+    }
+
+    .brand p {
+      margin-top: 7px;
+
+      color: #8192aa;
+
+      font-size: 11px;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+    }
+
+    /* ===============================
+       AUTH CARD
+    =============================== */
+
+    .auth-card {
+      position: relative;
+
+      padding: 31px 28px;
+
+      border-radius: 28px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.095),
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid rgba(120,180,255,.18);
+
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+
+      box-shadow:
+        0 35px 90px rgba(0,0,0,.72),
+        inset 0 1px 0 rgba(255,255,255,.09),
+        0 0 55px rgba(30,120,255,.08);
+
+      overflow: hidden;
+    }
+
+    .auth-card::before {
+      content: "";
+
+      position: absolute;
+
+      width: 220px;
+      height: 220px;
+
+      top: -130px;
+      left: -130px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(50,145,255,.25),
+          transparent 70%
+        );
+
+      animation:
+        cardGlow 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes cardGlow {
+      to {
+        transform:
+          translate(470px, 520px)
+          scale(1.4);
+      }
+    }
+
+    /* ===============================
+       TOP LIGHT
+    =============================== */
+
+    .top-light {
+      position: absolute;
+
+      top: 0;
+      left: -100%;
+
+      width: 65%;
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #9ed3ff,
+          transparent
+        );
+
+      box-shadow:
+        0 0 12px #4da3ff;
+
+      animation:
+        topLight 4s linear infinite;
+    }
+
+    @keyframes topLight {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 150%;
+      }
+    }
+
+    /* ===============================
+       LOGIN TYPE SELECTOR
+    =============================== */
+
+    .login-type {
+      display: flex;
+
+      gap: 8px;
+
+      padding: 5px;
+
+      margin-bottom: 18px;
+
+      border-radius: 14px;
+
+      background:
+        rgba(0,0,0,.25);
+
+      border:
+        1px solid rgba(255,255,255,.06);
+    }
+
+    .type-btn {
+      flex: 1;
+
+      border: 0;
+
+      padding: 10px;
+
+      border-radius: 10px;
+
+      color: #72849d;
+
+      background: transparent;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: .3s ease;
+    }
+
+    .type-btn:hover {
+      color: #dcecff;
+    }
+
+    .type-btn.active {
+      color: #ffffff;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(44,130,255,.95),
+          rgba(18,91,210,.95)
+        );
+
+      box-shadow:
+        0 6px 22px rgba(24,105,255,.25),
+        inset 0 1px 0 rgba(255,255,255,.25);
+    }
+
+    /* ===============================
+       TABS
+    =============================== */
+
+    .tabs {
+      display: flex;
+
+      padding: 5px;
+
+      margin-bottom: 27px;
+
+      border-radius: 15px;
+
+      background:
+        rgba(0,0,0,.30);
+
+      border:
+        1px solid rgba(255,255,255,.06);
+    }
+
+    .tab {
+      flex: 1;
+
+      border: 0;
+
+      padding: 12px;
+
+      border-radius: 11px;
+
+      color: #718199;
+
+      background: transparent;
+
+      font-size: 14px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: .35s ease;
+    }
+
+    .tab:hover {
+      color: #e5f1ff;
+    }
+
+    .tab.active {
+      color: #ffffff;
+
+      background:
+        linear-gradient(
+          135deg,
+          #318cff,
+          #155ad5
+        );
+
+      box-shadow:
+        0 8px 25px rgba(25,105,240,.28),
+        inset 0 1px 0 rgba(255,255,255,.25);
+
+      transform:
+        translateY(-1px);
+    }
+
+    /* ===============================
+       FORM
+    =============================== */
+
+    .form {
+      animation:
+        formEnter .4s ease;
+    }
+
+    @keyframes formEnter {
+      from {
+        opacity: 0;
+        transform: translateX(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .form-title {
+      font-size: 23px;
+
+      font-weight: 750;
+
+      margin-bottom: 7px;
+    }
+
+    .form-subtitle {
+      color: #7d8ca3;
+
+      font-size: 13px;
+
+      margin-bottom: 23px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-group label {
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #a4b1c3;
+
+      font-size: 12px;
+
+      font-weight: 600;
+    }
+
+    .input-box {
+      position: relative;
+    }
+
+    .input-box input {
+      width: 100%;
+
+      padding: 15px;
+
+      border-radius: 14px;
+
+      border:
+        1px solid rgba(130,180,255,.11);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.055),
+          rgba(0,0,0,.20)
+        );
+
+      color: #ffffff;
+
+      outline: none;
+
+      transition:
+        .3s ease;
+    }
+
+    .input-box input::placeholder {
+      color: #536277;
+    }
+
+    .input-box input:focus {
+      border-color:
+        rgba(75,155,255,.65);
+
+      box-shadow:
+        0 0 0 3px rgba(30,120,255,.06),
+        0 0 25px rgba(30,120,255,.12);
+
+      transform:
+        translateY(-1px);
+    }
+
+    /* ===============================
+       MAIN BUTTON
+    =============================== */
+
+    .main-btn {
+      width: 100%;
+
+      margin-top: 4px;
+
+      padding: 15px;
+
+      border: 0;
+
+      border-radius: 15px;
+
+      position: relative;
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      color: #ffffff;
+
+      font-size: 15px;
+
+      font-weight: 800;
+
+      letter-spacing: .2px;
+
+      background:
+        linear-gradient(
+          110deg,
+          #0d4fc4,
+          #2e8cff,
+          #0e63e9,
+          #174ca7
+        );
+
+      background-size: 250% auto;
+
+      box-shadow:
+        0 10px 30px rgba(20,105,240,.28),
+        inset 0 1px 0 rgba(255,255,255,.28);
+
+      animation:
+        buttonGradient 5s linear infinite;
+
+      transition:
+        .25s ease;
+    }
+
+    @keyframes buttonGradient {
+      to {
+        background-position:
+          250% center;
+      }
+    }
+
+    .main-btn:hover {
+      transform:
+        translateY(-3px);
+
+      box-shadow:
+        0 16px 42px rgba(20,105,240,.42),
+        0 0 30px rgba(40,140,255,.15);
+    }
+
+    .main-btn:active {
+      transform:
+        scale(.98);
+    }
+
+    .main-btn::before {
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      left: -120%;
+
+      width: 65%;
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.55),
+          transparent
+        );
+
+      transform:
+        skewX(-20deg);
+
+      animation:
+        buttonSweep 3.5s ease-in-out infinite;
+    }
+
+    @keyframes buttonSweep {
+      0%, 45% {
+        left: -120%;
+      }
+
+      100% {
+        left: 150%;
+      }
+    }
+
+    /* ===============================
+       BUSINESS INFO
+    =============================== */
+
+    .footer-info {
+      text-align: center;
+
+      margin-top: 22px;
+
+      color: #617087;
+
+      font-size: 11px;
+
+      line-height: 1.9;
+    }
+
+    .footer-info strong {
+      color: #a8d3ff;
+
+      font-weight: 600;
+    }
+
+    .copyright {
+      text-align: center;
+
+      margin-top: 13px;
+
+      color: #3e4c60;
+
+      font-size: 10px;
+    }
+
+
+    /* ===============================
+       MOBILE TOUCH / SAFE AREA
+    =============================== */
+    button, input {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        min-height: 100svh;
+        align-items: flex-start;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+
+      .container {
+        padding-top: max(18px, env(safe-area-inset-top));
+        padding-bottom: 24px;
+      }
+
+      .main-btn,
+      .tab,
+      .type-btn {
+        min-height: 46px;
+      }
+
+      .input-box input {
+        min-height: 48px;
+        font-size: 16px;
+      }
+    }
+
+    /* ===============================
+       DESKTOP
+    =============================== */
+
+    @media (min-width: 700px) {
+
+      body {
+        padding: 35px 0;
+      }
+
+      .container {
+        width: 470px;
+      }
+
+      .auth-card {
+        padding: 34px 31px;
+      }
+    }
+
+    /* ===============================
+       MOBILE
+    =============================== */
+
+    @media (max-width: 480px) {
+
+      .container {
+        width: 92%;
+
+        padding:
+          18px 0;
+      }
+
+      .auth-card {
+        padding:
+          25px 19px;
+
+        border-radius:
+          23px;
+      }
+
+      .logo-wrap {
+        width: 73px;
+        height: 73px;
+      }
+
+      .logo {
+        width: 58px;
+        height: 58px;
+
+        border-radius: 19px;
+
+        font-size: 21px;
+      }
+
+      .brand h1 {
+        font-size: 20px;
+
+        letter-spacing: 1.4px;
+      }
+
+      .brand p {
+        font-size: 9px;
+
+        letter-spacing: 1.4px;
+      }
+
+      .form-title {
+        font-size: 21px;
+      }
+
+      .input-box input {
+        padding: 14px;
+      }
+
+      .main-btn {
+        padding: 14px;
+      }
+
+      .type-btn {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 350px) {
+
+      .container {
+        width: 94%;
+      }
+
+      .auth-card {
+        padding:
+          22px 16px;
+      }
+
+      .brand h1 {
+        font-size: 18px;
+      }
+
+      .form-title {
+        font-size: 19px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: .01ms !important;
+      }
+    }
+    .password-box {
+  position: relative;
+}
+
+.password-box input {
+  padding-right: 48px !important;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+
+  color: #7fa8d8;
+  font-size: 18px;
+
+  cursor: pointer;
+
+  padding: 5px;
+
+  transition: .25s ease;
+}
+
+.password-toggle:hover {
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.12);
+}
+
+.password-toggle:active {
+  transform: translateY(-50%) scale(.92);
+}
+/* Mobile tab click fix */
+.auth-card::before,
+.top-light,
+.bg-orb,
+.particles {
+  pointer-events: none;
+}
+
+.tabs,
+.tab {
+  position: relative;
+  z-index: 50;
+  pointer-events: auto;
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- Background -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="particles">
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+  </div>
+
+
+  <main class="container">
+
+    <!-- BRAND -->
+    <section class="brand">
+
+      <div class="logo-wrap">
+
+        <div class="logo-ring"></div>
+
+        <div class="logo">
+          GO
+        </div>
+
+      </div>
+
+      <h1>GOPI ONLINE SERVICE</h1>
+
+      <p>Professional Online Services</p>
+
+    </section>
+
+
+    <!-- AUTH -->
+    <section class="auth-card">
+
+      <div class="top-light"></div>
+
+
+      <!-- LOGIN / REGISTER -->
+      <div class="tabs">
+
+        <button
+  type="button"
+  class="tab active"
+  id="loginTab">
+  Login
+</button>
+
+<button
+  type="button"
+  class="tab"
+  id="registerTab">
+  Register
+</button>
+
+      </div>
+
+
+      <!-- LOGIN -->
+      <div
+        id="loginForm"
+        class="form">
+
+        <h2 class="form-title">
+          Welcome Back
+        </h2>
+
+        <p class="form-subtitle">
+          Login securely to continue
+        </p>
+
+
+        <!-- Login Method -->
+        <div class="login-type">
+
+          <button
+            type="button"
+            class="type-btn active"
+            id="emailType"
+            onclick="emailLogin()">
+            ✉ Email / Gmail
+          </button>
+
+          <button
+            type="button"
+            class="type-btn"
+            id="phoneType"
+            onclick="phoneLogin()">
+            📱 Mobile Number
+          </button>
+
+        </div>
+
+
+        <!-- Email / Gmail OTP -->
+<div
+  id="emailLoginBox"
+  class="input-group">
+
+  <label>
+    Email / Gmail
+  </label>
+
+  <div class="input-box">
+
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="Enter your Gmail or email"
+      autocomplete="email">
+
+  </div>
+
+  <button
+    type="button"
+    class="main-btn"
+    onclick="sendEmailOTP()">
+    Send OTP
+  </button>
+
+</div>
+
+
+<!-- Email OTP Verification -->
+<div
+  id="emailOTPBox"
+  class="input-group hidden">
+
+  <label>
+    Enter OTP
+  </label>
+
+  <div class="input-box">
+
+    <input
+      id="emailOTP"
+      type="text"
+      inputmode="numeric"
+      maxlength="6"
+      placeholder="Enter 6-digit OTP"
+      autocomplete="one-time-code">
+
+  </div>
+
+  <button
+    type="button"
+    class="main-btn"
+    onclick="verifyEmailOTP()">
+    Verify OTP
+  </button>
+
+</div>
+
+
+        <!-- Phone -->
+        <div
+          id="phoneLoginBox"
+          class="input-group hidden">
+
+          <label>
+            Mobile Number
+          </label>
+
+          <div class="input-box">
+
+            <input
+              type="tel"
+              placeholder="Enter 10-digit mobile number"
+              maxlength="10"
+              autocomplete="tel">
+
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+  <label>
+    Password
+  </label>
+
+  <div class="input-box password-box">
+
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Enter your password"
+      autocomplete="current-password">
+
+    <button
+      type="button"
+      class="password-toggle"
+      onclick="togglePassword('loginPassword', this)"
+      aria-label="Show password">
+      👁
+    </button>
+
+  </div>
+
+</div>
+
+        <button type="button" class="main-btn">
+          Login Securely
+        </button>
+
+      </div>
+
+
+      <!-- REGISTER -->
+      <div
+        id="registerForm"
+        class="form hidden">
+
+        <h2 class="form-title">
+          Create Account
+        </h2>
+
+        <p class="form-subtitle">
+          Register for GOPI ONLINE SERVICE
+        </p>
+
+
+        <div class="input-group">
+
+          <label>
+            Full Name
+          </label>
+
+          <div class="input-box">
+
+            <input
+  id="registerName"
+  type="text"
+  placeholder="Enter your full name"
+  autocomplete="name">
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            Email / Gmail
+          </label>
+
+          <div class="input-box">
+
+            <input
+  id="registerEmail"
+  type="email"
+  placeholder="Enter your Gmail or email"
+  autocomplete="email">
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            Mobile Number
+          </label>
+
+          <div class="input-box">
+
+            <input
+  id="registerPhone"
+  type="tel"
+  placeholder="Enter 10-digit mobile number"
+  maxlength="10"
+  inputmode="numeric"
+  autocomplete="tel">
+          </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+  <label>
+    Password
+  </label>
+
+  <div class="input-box password-box">
+
+    <input
+      id="registerPassword"
+      type="password"
+      placeholder="Create a secure password"
+      autocomplete="new-password">
+
+    <button
+      type="button"
+      class="password-toggle"
+      onclick="togglePassword('registerPassword', this)"
+      aria-label="Show password">
+      👁
+    </button>
+
+  </div>
+
+</div>
+
+       <button
+  type="button"
+  class="main-btn"
+  id="createAccountBtn">
+  Create Account
+</button>
+
+
+<!-- REGISTER EMAIL OTP -->
+<div
+  id="registerOTPBox"
+  class="input-group hidden">
+
+  <label>
+    Enter Email OTP
+  </label>
+
+  <div class="input-box">
+
+    <input
+      id="registerOTP"
+      type="text"
+      inputmode="numeric"
+      maxlength="6"
+      placeholder="Enter 6-digit OTP"
+      autocomplete="one-time-code">
+
+  </div>
+
+  <button
+    type="button"
+    class="main-btn"
+    onclick="verifyRegisterOTP()">
+    Verify Email OTP
+  </button>
+<button
+  type="button"
+  class="main-btn"
+  onclick="resendRegisterOTP()">
+  Resend OTP
+</button>
+</div>
+      </div>
+
+    </section>
+
+
+    <!-- BUSINESS DETAILS -->
+    <div class="footer-info">
+
+      <strong>GOPINATH MONDAL</strong>
+
+      <br>
+
+      B D SHERPUR, THAKUR PARA ROAD
+
+      <br>
+
+      Contact:
+      <strong>9609047478</strong>
+
+    </div>
+
+
+    <div class="copyright">
+      © 2026 GOPI ONLINE SERVICE • All Rights Reserved
+    </div>
+
+  </main>
+
+
+  <script type="module"> 
+  import {supabase} from "./supabase.js";
+
+  async function resendRegisterOTP() {
+
+  const email =
+    sessionStorage.getItem("register_email") ||
+    document.getElementById("registerEmail").value.trim();
+
+  if (!email) {
+    alert("Email address not found. Please enter your email again.");
+    return;
+  }
+
+  try {
+
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: email
+    });
+
+    if (error) {
+      alert(
+        "Could not resend OTP.\n\n" +
+        error.message
+      );
+      return;
+    }
+
+    alert(
+      "✅ New OTP has been sent!\n\n" +
+      "Please check your Gmail Inbox and Spam folder."
+    );
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      "Something went wrong.\n\n" +
+      err.message
+    );
+  }
+}
+
+  // ===============================
+// REGISTER - CREATE ACCOUNT
+// ===============================
+
+async function registerUser() {
+   
+
+  const name = document.getElementById("registerName").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
+  const phone = document.getElementById("registerPhone").value.trim();
+  const password = document.getElementById("registerPassword").value;
+
+  // Check all fields
+  if (!name || !email || !phone || !password) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  // Check mobile
+  if (!/^\d{10}$/.test(phone)) {
+    alert("Please enter a valid 10-digit mobile number.");
+    return;
+  }
+
+  // Check password
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
+  try {
+
+    // Create account
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+
+      options: {
+        data: {
+          full_name: name
+        }
+      }
+    });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    /*
+      Supabase creates the user here.
+      Because Confirm Email is ON,
+      the account remains unverified until email verification.
+    */
+
+    // Store email for OTP verification
+    sessionStorage.setItem(
+      "register_email",
+      email
+    );
+
+    // Store name temporarily for this registration flow
+    sessionStorage.setItem(
+      "register_name",
+      name
+    );
+
+    // Open OTP box
+    document
+      .getElementById("registerOTPBox")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("registerOTP")
+      .focus();
+
+    alert(
+      "Account registration started!\n\n" +
+      "A verification code has been sent to your email.\n\n" +
+      "Please enter the 6-digit OTP."
+    );
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      "Something went wrong.\n\n" +
+      err.message
+    );
+
+  }
+}
+
+
+async function verifyRegisterOTP() {
+
+  const email =
+    sessionStorage.getItem("register_email") ||
+    document.getElementById("registerEmail").value.trim();
+
+  const otp =
+    document.getElementById("registerOTP").value.trim();
+
+  if (!email) {
+    alert("Email address not found. Please register again.");
+    return;
+  }
+
+  if (!otp) {
+    alert("Please enter the OTP.");
+    return;
+  }
+
+  if (!/^\d{6}$/.test(otp)) {
+    alert("Please enter the 6-digit OTP.");
+    return;
+  }
+
+  try {
+
+    const { data, error } =
+      await supabase.auth.verifyOtp({
+        email: email,
+        token: otp,
+        type: "email"
+      });
+
+    if (error) {
+      alert(
+        "OTP verification failed.\n\n" +
+        error.message
+      );
+      return;
+    }
+
+    if (data.session && data.user) {
+
+      alert(
+        "✅ Email Verified Successfully!\n\n" +
+        "Your GOPI ONLINE SERVICE account is ready."
+      );
+
+      // Clear temporary registration data
+      sessionStorage.removeItem("register_email");
+      sessionStorage.removeItem("register_name");
+
+
+      // Go to Login tab
+      showLogin();
+
+      // Put verified email into login box
+      document.getElementById("loginEmail").value = email;
+
+      // Hide OTP box
+      document
+        .getElementById("registerOTPBox")
+        .classList.add("hidden");
+
+    }
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      "Verification error.\n\n" +
+      err.message
+    );
+
+  }
+}
+
+
+
+  // ===============================
+// EMAIL OTP - SEND
+// ===============================
+
+async function sendEmailOTP() {
+
+  const email = document
+    .getElementById("loginEmail")
+    .value
+    .trim();
+
+  if (!email) {
+    alert("Please enter your Gmail or Email.");
+    return;
+  }
+
+  const { error } = await supabase.auth.signInWithOtp({
+    email: email,
+    options: {
+      shouldCreateUser: true
+    }
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // Email box hide
+  document
+    .getElementById("emailLoginBox")
+    .classList.add("hidden");
+
+  // OTP box show
+  document
+    .getElementById("emailOTPBox")
+    .classList.remove("hidden");
+
+  alert("OTP sent to your email. Please check your inbox.");
+}
+
+
+// ===============================
+// EMAIL OTP - VERIFY
+// ===============================
+
+async function verifyEmailOTP() {
+
+  const email = document
+    .getElementById("loginEmail")
+    .value
+    .trim();
+
+  const otp = document
+    .getElementById("emailOTP")
+    .value
+    .trim();
+
+  if (!email) {
+    alert("Please enter your Gmail or email.");
+    return;
+  }
+
+  if (!/^\d{6}$/.test(otp)) {
+    alert("Please enter the 6-digit OTP.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email: email,
+      token: otp,
+      type: "email"
+    });
+
+    if (error) {
+      alert("OTP verification failed.\n\n" + error.message);
+      return;
+    }
+
+    if (!data.session || !data.user) {
+      alert("Login verification completed, but no session was created.\n\nPlease try again.");
+      return;
+    }
+
+    const loggedInEmail = (data.user.email || email).trim().toLowerCase();
+    const adminEmail = "gopi742301@gmail.com";
+
+    if (loggedInEmail === adminEmail) {
+      alert("\u2705 Admin Login Verified!\n\nOpening Admin Panel...");
+      window.location.replace("admin.html");
+    } else {
+      alert("\u2705 Login Verified Successfully!\n\nOpening Main Dashboard...");
+      window.location.replace("dashboard.html");
+    }
+
+  } catch (err) {
+    console.error("OTP verification error:", err);
+    alert("Something went wrong.\n\n" + err.message);
+  }
+}
+
+
+    function togglePassword(inputId, button) {
+
+  const input = document.getElementById(inputId);
+
+  if (input.type === "password") {
+
+    input.type = "text";
+
+    button.textContent = "🙈";
+
+    button.setAttribute(
+      "aria-label",
+      "Hide password"
+    );
+
+  } else {
+
+    input.type = "password";
+
+    button.textContent = "👁";
+
+    button.setAttribute(
+      "aria-label",
+      "Show password"
+    );
+  }
+}
+
+    function showLogin() {
+
+      document
+        .getElementById("loginForm")
+        .classList.remove("hidden");
+
+      document
+        .getElementById("registerForm")
+        .classList.add("hidden");
+
+      document
+        .getElementById("loginTab")
+        .classList.add("active");
+
+      document
+        .getElementById("registerTab")
+        .classList.remove("active");
+    }
+
+
+    function showRegister() {
+
+      document
+        .getElementById("loginForm")
+        .classList.add("hidden");
+
+      document
+        .getElementById("registerForm")
+        .classList.remove("hidden");
+
+      document
+        .getElementById("loginTab")
+        .classList.remove("active");
+
+      document
+        .getElementById("registerTab")
+        .classList.add("active");
+    }
+
+
+    function emailLogin() {
+
+      document
+        .getElementById("emailLoginBox")
+        .classList.remove("hidden");
+
+      document
+        .getElementById("phoneLoginBox")
+        .classList.add("hidden");
+
+      document
+        .getElementById("emailType")
+        .classList.add("active");
+
+      document
+        .getElementById("phoneType")
+        .classList.remove("active");
+    }
+
+
+    function phoneLogin() {
+
+      document
+        .getElementById("emailLoginBox")
+        .classList.add("hidden");
+
+      document
+        .getElementById("phoneLoginBox")
+        .classList.remove("hidden");
+
+      document
+        .getElementById("emailType")
+        .classList.remove("active");
+
+      document
+        .getElementById("phoneType")
+        .classList.add("active");
+    }
+// ===============================
+// MAKE FUNCTIONS AVAILABLE TO HTML
+// ===============================
+
+window.registerUser = registerUser;
+window.verifyRegisterOTP = verifyRegisterOTP;
+window.resendRegisterOTP = resendRegisterOTP;
+
+window.sendEmailOTP = sendEmailOTP;
+window.verifyEmailOTP = verifyEmailOTP;
+
+window.togglePassword = togglePassword;
+
+window.showLogin = showLogin;
+window.showRegister = showRegister;
+
+window.emailLogin = emailLogin;
+window.phoneLogin = phoneLogin;
+
+
+// ===============================
+// CREATE ACCOUNT BUTTON
+// ===============================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const createAccountBtn =
+    document.getElementById("createAccountBtn");
+
+  if (createAccountBtn) {
+    createAccountBtn.addEventListener(
+      "click",
+      registerUser
+    );
+  }
+
+});
+  </script>
+
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
+
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+
+  registerTab.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    loginForm.classList.add("hidden");
+    registerForm.classList.remove("hidden");
+
+    loginTab.classList.remove("active");
+    registerTab.classList.add("active");
+  });
+
+  loginTab.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    registerForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+
+    registerTab.classList.remove("active");
+    loginTab.classList.add("active");
+  });
+
+});
+</script>
+
+
+
+</body>
+</html>

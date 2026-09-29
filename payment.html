@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GOPI ONLINE SERVICE • Secure Payment</title>
+<meta name="theme-color" content="#060914">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
+  :root{
+    --bg:#050711;
+    --panel:rgba(15,19,34,.78);
+    --panel2:rgba(11,15,28,.92);
+    --text:#f7fbff;
+    --muted:#98a4bb;
+    --line:rgba(255,255,255,.09);
+    --blue:#4d8dff;
+    --cyan:#28d7ff;
+    --violet:#9b6cff;
+    --green:#28d17c;
+    --shadow:0 24px 80px rgba(0,0,0,.46);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%;font-family:"DM Sans",system-ui,sans-serif;color:var(--text);background:var(--bg)}
+  body{min-height:100vh;overflow-x:hidden;position:relative}
+  body:before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.38;
+    background-image:
+      linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(circle at center,#000 15%,transparent 85%);
+  }
+  .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+  .orb.a{width:310px;height:310px;left:-130px;top:-120px;background:rgba(70,112,255,.26);animation:floatA 9s ease-in-out infinite alternate}
+  .orb.b{width:280px;height:280px;right:-120px;bottom:-110px;background:rgba(26,210,255,.18);animation:floatB 11s ease-in-out infinite alternate}
+  .orb.c{width:170px;height:170px;left:48%;top:38%;background:rgba(156,89,255,.11);animation:pulse 5s ease-in-out infinite}
+  @keyframes floatA{to{transform:translate(70px,55px) scale(1.12)}}
+  @keyframes floatB{to{transform:translate(-60px,-50px) scale(1.08)}}
+  @keyframes pulse{50%{opacity:.55;transform:scale(1.18)}}
+
+  .page{width:min(760px,94vw);margin:0 auto;padding:22px 0 38px;position:relative;z-index:2}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;animation:drop .65s ease both}
+  .brand{display:flex;align-items:center;gap:11px}
+  .logo{
+    width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+    font-family:"Manrope",sans-serif;font-weight:800;letter-spacing:-1px;
+    background:linear-gradient(135deg,#4b86ff,#7b63ff 55%,#27d8ff);
+    box-shadow:0 0 28px rgba(78,137,255,.42),inset 0 1px 0 rgba(255,255,255,.35);
+  }
+  .brand strong{font-family:"Manrope",sans-serif;font-size:15px;letter-spacing:.5px}
+  .brand small{display:block;color:#8491aa;font-size:10px;margin-top:2px}
+  .back{
+    border:1px solid var(--line);background:rgba(255,255,255,.045);color:#dce7f7;
+    border-radius:13px;padding:10px 13px;font-weight:700;cursor:pointer;transition:.25s;
+  }
+  .back:hover{transform:translateY(-2px);border-color:rgba(77,141,255,.45);box-shadow:0 0 25px rgba(77,141,255,.14)}
+
+  .hero{text-align:center;padding:18px 10px 20px;animation:fadeUp .7s .08s both}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;
+    border:1px solid rgba(40,209,124,.18);background:rgba(40,209,124,.065);
+    color:#7df2b4;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 13px rgba(40,209,124,.9);animation:blink 1.6s infinite}
+  @keyframes blink{50%{opacity:.45;transform:scale(.75)}}
+  h1{font-family:"Manrope",sans-serif;font-size:clamp(28px,6vw,45px);line-height:1.08;margin:13px 0 9px;letter-spacing:-1.5px}
+  .hero p{color:var(--muted);font-size:13px;line-height:1.65}
+
+  .card{
+    border:1px solid var(--line);background:linear-gradient(145deg,rgba(21,27,48,.84),rgba(7,10,19,.88));
+    border-radius:26px;box-shadow:var(--shadow),0 0 55px rgba(79,112,255,.06);
+    backdrop-filter:blur(18px);overflow:hidden;position:relative;animation:fadeUp .75s .15s both;
+  }
+  .card:before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(120deg,rgba(255,255,255,.07),transparent 25%,transparent 70%,rgba(40,215,255,.035));
+  }
+
+  .summary{padding:21px;border-bottom:1px solid var(--line);display:grid;gap:13px}
+  .summary-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+  .service-name{font-family:"Manrope",sans-serif;font-size:18px;font-weight:800}
+  .service-sub{font-size:11px;color:#8592aa;margin-top:4px}
+  .total{text-align:right}
+  .total small{display:block;color:#7f8ba3;font-size:10px;text-transform:uppercase;letter-spacing:1px}
+  .total strong{display:block;font-family:"Manrope",sans-serif;font-size:25px;margin-top:2px;background:linear-gradient(90deg,#fff,#77dfff);-webkit-background-clip:text;color:transparent}
+  .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .pill{font-size:11px;color:#c8d5e8;border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:10px;padding:7px 9px}
+
+  .pay-area{padding:22px}
+  .pay-title{text-align:center;font-family:"Manrope",sans-serif;font-size:17px}
+  .pay-sub{text-align:center;color:#8290a8;font-size:11px;margin:5px 0 18px}
+  .qr-wrap{
+    width:min(320px,78vw);aspect-ratio:1;margin:0 auto 18px;padding:13px;border-radius:25px;
+    background:linear-gradient(145deg,#fff,#eaf1ff);
+    box-shadow:0 0 0 1px rgba(255,255,255,.6),0 0 45px rgba(70,139,255,.22);
+    position:relative;animation:qrFloat 4s ease-in-out infinite;
+  }
+  .qr-wrap img{display:block;width:100%;height:100%;object-fit:cover;border-radius:17px}
+  .qr-tag{
+    position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);
+    padding:7px 12px;border-radius:999px;background:#0b1020;border:1px solid rgba(255,255,255,.12);
+    color:#dce9ff;font-size:10px;font-weight:800;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.3)
+  }
+  @keyframes qrFloat{50%{transform:translateY(-5px);box-shadow:0 0 0 1px rgba(255,255,255,.6),0 0 65px rgba(70,139,255,.32)}}
+
+  .upi-id{display:flex;align-items:center;justify-content:center;gap:9px;margin:25px auto 18px;max-width:360px}
+  .upi-id span{padding:12px 13px;border:1px solid rgba(77,141,255,.2);background:rgba(77,141,255,.07);border-radius:13px;font-weight:800;font-size:13px;letter-spacing:.2px}
+  .copy{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;border-radius:12px;padding:11px 12px;font-weight:800;cursor:pointer}
+  .copy:active{transform:scale(.96)}
+
+  .apps{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:5px}
+  .app-btn{
+    min-height:73px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.035);
+    color:#eaf2ff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    transition:.25s;position:relative;overflow:hidden;
+  }
+  .app-btn:before{content:"";position:absolute;inset:-50%;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.13) 50%,transparent 60%);transform:translateX(-70%) rotate(8deg);transition:.65s}
+  .app-btn:hover:before{transform:translateX(70%) rotate(8deg)}
+  .app-btn:hover{transform:translateY(-3px);border-color:rgba(77,141,255,.35);box-shadow:0 13px 30px rgba(0,0,0,.22)}
+  .app-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-weight:900;font-size:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+  .phonepe .app-icon{background:linear-gradient(135deg,#6b2cff,#a85cff)}
+  .gpay .app-icon{background:linear-gradient(135deg,#4285f4,#34a853)}
+  .paytm .app-icon{background:linear-gradient(135deg,#00a9e0,#0086c9)}
+  .anyupi .app-icon{background:linear-gradient(135deg,#ffb300,#ff5f00)}
+  .app-btn b{font-size:10px;letter-spacing:.2px}
+  .app-btn small{font-size:8px;color:#77859e}
+
+  .pay-now{
+    width:100%;margin-top:17px;border:0;border-radius:17px;padding:16px 18px;color:#fff;
+    font-family:"Manrope",sans-serif;font-size:14px;font-weight:800;cursor:pointer;
+    background:linear-gradient(100deg,#416eff,#775dff 48%,#20cfff);
+    background-size:180% 100%;box-shadow:0 13px 38px rgba(72,105,255,.28),inset 0 1px 0 rgba(255,255,255,.3);
+    position:relative;overflow:hidden;animation:gradientMove 4s ease infinite;
+  }
+  .pay-now:before{content:"";position:absolute;top:0;bottom:0;width:80px;left:-100px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);animation:shine 2.8s infinite}
+  .pay-now:active{transform:scale(.985)}
+  @keyframes gradientMove{50%{background-position:100% 0}}
+  @keyframes shine{55%,100%{left:120%}}
+  .secure{text-align:center;color:#718099;font-size:10px;margin-top:10px}
+
+  .note{
+    margin-top:13px;padding:13px 14px;border:1px solid rgba(255,193,7,.14);background:rgba(255,193,7,.045);
+    border-radius:14px;color:#aab5c7;font-size:10px;line-height:1.55;text-align:center;
+  }
+
+  .toast{
+    position:fixed;left:50%;bottom:20px;transform:translate(-50%,25px) scale(.95);opacity:0;pointer-events:none;
+    z-index:20;background:rgba(12,17,31,.94);border:1px solid rgba(255,255,255,.11);padding:12px 15px;border-radius:13px;
+    box-shadow:0 18px 45px rgba(0,0,0,.4);font-size:11px;transition:.28s;white-space:nowrap
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @keyframes drop{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+
+
+  .utr-panel{
+    margin-top:16px;
+    padding:18px;
+    border:1px solid rgba(92,137,255,.18);
+    border-radius:22px;
+    background:
+      radial-gradient(circle at 10% 0%,rgba(76,126,255,.12),transparent 36%),
+      radial-gradient(circle at 95% 100%,rgba(33,213,255,.07),transparent 38%),
+      rgba(255,255,255,.025);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 16px 45px rgba(0,0,0,.18);
+    position:relative;
+    overflow:hidden;
+  }
+  .utr-panel:after{
+    content:"";
+    position:absolute;
+    top:0;left:-30%;width:45%;height:1px;
+    background:linear-gradient(90deg,transparent,#73b7ff,transparent);
+    box-shadow:0 0 18px #4d8dff;
+    animation:utrScan 3.8s ease-in-out infinite;
+  }
+  @keyframes utrScan{50%{left:88%}100%{left:120%}}
+  .utr-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .utr-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    color:#8fc9ff;font-size:10px;font-weight:900;letter-spacing:.8px;text-transform:uppercase
+  }
+  .utr-dot{width:7px;height:7px;border-radius:50%;background:#48e6a1;box-shadow:0 0 14px rgba(72,230,161,.8);animation:blink 1.5s infinite}
+  .utr-lock{font-size:9px;color:#8290a8;border:1px solid var(--line);padding:6px 8px;border-radius:9px;background:rgba(255,255,255,.025)}
+  .utr-title{font-family:"Manrope",sans-serif;font-size:18px;font-weight:800;margin-top:12px}
+  .utr-sub{color:#7f8da6;font-size:10px;line-height:1.55;margin:5px 0 14px}
+  .utr-label{display:block;color:#b9c7da;font-size:10px;font-weight:800;margin-bottom:7px;letter-spacing:.25px}
+  .utr-input-wrap{
+    display:flex;align-items:center;gap:8px;padding:4px 7px 4px 12px;
+    border:1px solid rgba(100,147,255,.18);border-radius:15px;
+    background:rgba(3,7,16,.58);transition:.25s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+  }
+  .utr-input-wrap:focus-within{
+    border-color:rgba(74,143,255,.7);
+    box-shadow:0 0 0 3px rgba(74,143,255,.09),0 0 28px rgba(74,143,255,.11);
+  }
+  .utr-icon{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    font-family:"Manrope",sans-serif;font-weight:800;color:#a9cbff;
+    background:linear-gradient(135deg,rgba(71,120,255,.2),rgba(38,210,255,.08));
+    border:1px solid rgba(101,151,255,.14);
+  }
+  #utrInput{
+    min-width:0;flex:1;border:0;outline:0;background:transparent;color:#f4f8ff;
+    font-family:"DM Sans",sans-serif;font-size:13px;font-weight:700;letter-spacing:.35px;padding:11px 3px;
+  }
+  #utrInput::placeholder{color:#59667d;font-weight:500}
+  .utr-check{
+    width:27px;height:27px;border-radius:50%;display:grid;place-items:center;
+    color:#5d6b82;background:rgba(255,255,255,.035);font-size:12px;font-weight:900;transition:.25s
+  }
+  .utr-input-wrap.valid .utr-check{
+    color:#06130d;background:#43e19a;box-shadow:0 0 18px rgba(67,225,154,.38)
+  }
+  .utr-input-wrap.invalid{border-color:rgba(255,93,112,.55);box-shadow:0 0 0 3px rgba(255,93,112,.06)}
+  .utr-help{font-size:9px;color:#64728a;margin:7px 2px 0;line-height:1.45}
+  .verify-btn{
+    width:100%;margin-top:13px;border:0;border-radius:15px;padding:14px 15px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    color:#fff;font-family:"Manrope",sans-serif;font-size:12px;font-weight:800;
+    background:linear-gradient(100deg,#3d6fff,#745cff 50%,#18cfe9);
+    background-size:180% 100%;cursor:pointer;position:relative;overflow:hidden;
+    box-shadow:0 12px 32px rgba(66,100,255,.22),inset 0 1px 0 rgba(255,255,255,.28);
+    animation:gradientMove 4s ease infinite;transition:.22s
+  }
+  .verify-btn:before{
+    content:"";position:absolute;top:0;bottom:0;width:75px;left:-100px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+    transform:skewX(-18deg);animation:shine 3s infinite
+  }
+  .verify-btn:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(66,100,255,.3)}
+  .verify-btn:active{transform:scale(.985)}
+  .verify-btn .arrow{font-size:17px;line-height:1}
+  .verify-status{
+    display:none;margin-top:12px;padding:11px 12px;border-radius:12px;
+    font-size:10px;line-height:1.5;text-align:center;border:1px solid transparent;
+  }
+  .verify-status.show{display:block;animation:statusIn .35s ease both}
+  .verify-status.success{
+    color:#82f0b6;background:rgba(40,209,124,.07);border-color:rgba(40,209,124,.18)
+  }
+  .verify-status.error{
+    color:#ff9daa;background:rgba(255,82,105,.07);border-color:rgba(255,82,105,.18)
+  }
+  .verify-status.pending{
+    color:#a9c8ff;background:rgba(77,141,255,.07);border-color:rgba(77,141,255,.18)
+  }
+  @keyframes statusIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media(max-width:560px){
+    .utr-panel{padding:16px}
+  }
+
+  @media(max-width:560px){
+    .page{width:92vw;padding-top:15px}
+    .apps{grid-template-columns:repeat(2,1fr)}
+    .summary-head{align-items:center}
+    .total strong{font-size:22px}
+    .pay-area{padding:17px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+
+<main class="page">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">GO</div>
+      <div><strong>GOPI ONLINE SERVICE</strong><small>Secure UPI Payment</small></div>
+    </div>
+    <button class="back" onclick="history.back()">← Back</button>
+  </div>
+
+  <section class="hero">
+    <span class="eyebrow"><i class="dot"></i> Secure Payment</span>
+    <h1>Complete your payment</h1>
+    <p>Scan the QR code or use any UPI app below to pay securely.</p>
+  </section>
+
+  <section class="card">
+    <div class="summary">
+      <div class="summary-head">
+        <div>
+          <div class="service-name" id="serviceName">Selected Service</div>
+          <div class="service-sub">GOPI ONLINE SERVICE</div>
+        </div>
+        <div class="total">
+          <small>Total</small>
+          <strong id="totalAmount">₹0</strong>
+        </div>
+      </div>
+      <div class="meta">
+        <span class="pill" id="unitPrice">₹0 / service</span>
+        <span class="pill" id="quantity">Quantity: 1</span>
+      </div>
+    </div>
+
+    <div class="pay-area">
+      <div class="pay-title">Scan & Pay</div>
+      <div class="pay-sub">Use your phone camera or UPI app to scan this QR</div>
+
+      <div class="qr-wrap">
+        <img src="gopi-upi-qr.png" alt="GOPI ONLINE SERVICE UPI QR Code">
+        <div class="qr-tag">UPI ID • gopi742301@okicici</div>
+      </div>
+
+      <div class="upi-id">
+        <span>gopi742301@okicici</span>
+        <button class="copy" id="copyBtn" type="button">Copy</button>
+      </div>
+
+      <div class="apps">
+        <button class="app-btn phonepe" type="button" onclick="openUPI('phonepe')">
+          <span class="app-icon">पे</span><b>PhonePe</b><small>Open app</small>
+        </button>
+        <button class="app-btn gpay" type="button" onclick="openUPI('gpay')">
+          <span class="app-icon">G</span><b>Google Pay</b><small>Open app</small>
+        </button>
+        <button class="app-btn paytm" type="button" onclick="openUPI('paytm')">
+          <span class="app-icon">₹</span><b>Paytm</b><small>Open app</small>
+        </button>
+        <button class="app-btn anyupi" type="button" onclick="openUPI('upi')">
+          <span class="app-icon">UPI</span><b>Any UPI</b><small>Choose app</small>
+        </button>
+      </div>
+
+      <button class="pay-now" type="button" onclick="openUPI('upi')">Pay ₹<span id="payButtonAmount">0</span> with UPI</button>
+      <div class="secure">🔒 UPI payment • Amount is pre-filled when supported by your app</div>
+
+
+      <section class="utr-panel" aria-labelledby="utrTitle">
+        <div class="utr-head">
+          <div class="utr-badge"><span class="utr-dot"></span> Payment Verification</div>
+          <div class="utr-lock">🔐 Secure</div>
+        </div>
+
+        <div class="utr-title" id="utrTitle">Enter UTR / Transaction ID</div>
+        <p class="utr-sub">
+          After payment, enter the UTR or transaction reference shown in your UPI app.
+        </p>
+
+        <label class="utr-label" for="utrInput">UTR / Transaction Number</label>
+        <div class="utr-input-wrap">
+          <span class="utr-icon">#</span>
+          <input
+            id="utrInput"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            maxlength="22"
+            placeholder="Enter your UTR / Transaction ID"
+            aria-describedby="utrHelp">
+          <span class="utr-check" id="utrCheck">✓</span>
+        </div>
+        <div class="utr-help" id="utrHelp">
+          Usually a transaction reference/UTR is shown after a successful UPI payment.
+        </div>
+
+        <button class="verify-btn" id="verifyBtn" type="button">
+          <span>Submit for Verification</span>
+          <span class="arrow">→</span>
+        </button>
+
+        <div class="verify-status" id="verifyStatus" role="status" aria-live="polite"></div>
+      </section>
+
+      <div class="note">
+        After completing payment, keep your payment confirmation/screenshot. Your service request can be matched using the selected service and amount.
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { supabase } from "./supabase.js";
+const params=new URLSearchParams(location.search);
+const service=(params.get("service")||sessionStorage.getItem("selected_service")||"Selected Service").trim();
+const price=Math.max(0,Number(params.get("price")||sessionStorage.getItem("selected_service_price")||0));
+const quantity=Math.max(1,Math.floor(Number(params.get("quantity")||sessionStorage.getItem("selected_service_quantity")||1)));
+const total=Math.max(0,Number(params.get("total")||sessionStorage.getItem("selected_service_total")||price*quantity));
+const upiId="gopi742301@okicici", payeeName="GOPI ONLINE SERVICE";
+document.getElementById("serviceName").textContent=service; document.getElementById("unitPrice").textContent="₹"+price.toLocaleString("en-IN")+" / service"; document.getElementById("quantity").textContent="Quantity: "+quantity; document.getElementById("totalAmount").textContent="₹"+total.toLocaleString("en-IN"); document.getElementById("payButtonAmount").textContent=total.toLocaleString("en-IN");
+function buildUPI(){return "upi://pay?"+new URLSearchParams({pa:upiId,pn:payeeName,am:total.toFixed(2),cu:"INR",tn:service+" x"+quantity}).toString()}
+function openUPI(app){const u=buildUPI(),q=u.split("?")[1];let target=u;if(app==="phonepe")target="phonepe://pay?"+q;if(app==="gpay")target="tez://upi/pay?"+q;if(app==="paytm")target="paytmmp://pay?"+q;window.location.href=target;if(app!=="upi")setTimeout(()=>window.location.href=u,1000)}
+window.openUPI=openUPI;
+document.getElementById("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(upiId);showToast("UPI ID copied")}catch{showToast("UPI ID: "+upiId)}};
+const input=document.getElementById("utrInput"),btn=document.getElementById("verifyBtn"),st=document.getElementById("verifyStatus"),wrap=document.querySelector(".utr-input-wrap");
+const clean=v=>v.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,22),valid=v=>/^[A-Z0-9]{6,22}$/.test(v);
+input.addEventListener("input",()=>{input.value=clean(input.value);wrap.classList.toggle("valid",valid(input.value));wrap.classList.remove("invalid")});
+btn.onclick=async()=>{btn.disabled=true; const {data,error:ae}=await supabase.auth.getSession(); const user=data?.session?.user; if(ae||!user){st.className="verify-status show error";st.textContent="Please login before submitting your payment.";btn.disabled=false;setTimeout(()=>location.href="index.html",900);return} const utr=clean(input.value);input.value=utr;if(!valid(utr)){wrap.classList.add("invalid");st.className="verify-status show error";st.textContent="Please enter a valid UTR / Transaction ID (6–22 letters or numbers).";btn.disabled=false;input.focus();return} btn.querySelector("span").textContent="Submitting securely…";const orderId="GOS-"+Date.now().toString(36).toUpperCase()+"-"+crypto.randomUUID().replaceAll("-","").slice(0,6).toUpperCase(); const {error}=await supabase.from("orders").insert({order_id:orderId,user_id:user.id,user_email:user.email||null,service,price,quantity,total,upi_id:upiId,utr,status_key:"verification",status:"Payment Verification"}); if(error){console.error(error);st.className="verify-status show error";st.textContent="Could not submit order. Please try again.";btn.disabled=false;btn.querySelector("span").textContent="Submit for Verification";return} sessionStorage.setItem("payment_details",JSON.stringify({service,price,quantity,total,upiId,utr,orderId,status:"verification_pending",submittedAt:new Date().toISOString()}));st.className="verify-status show pending";st.textContent="✓ Payment submitted. Opening MY ORDERS…";btn.querySelector("span").textContent="Submitted ✓";setTimeout(()=>location.href="orders.html",700)};
+</script>
+</body>
+</html>

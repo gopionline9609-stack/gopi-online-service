@@ -1,0 +1,1675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050812">
+
+<title>My Documents • GOPI ONLINE SERVICE</title>
+
+<style>
+:root{
+  --bg:#040611;
+  --card:#0b1020cc;
+  --text:#f7f9ff;
+  --muted:#929db8;
+  --line:rgba(255,255,255,.10);
+
+  --purple:#8b5cf6;
+  --violet:#a855f7;
+  --cyan:#22d3ee;
+  --blue:#38bdf8;
+  --green:#22c55e;
+  --yellow:#facc15;
+  --red:#fb7185;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+  background:
+    radial-gradient(circle at 8% 5%,#8b5cf62b,transparent 30%),
+    radial-gradient(circle at 92% 12%,#22d3ee20,transparent 28%),
+    radial-gradient(circle at 50% 100%,#a855f718,transparent 35%),
+    linear-gradient(145deg,#02030a,#080c19 55%,#03050c);
+
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.24;
+
+  background-image:
+    linear-gradient(#ffffff05 1px,transparent 1px),
+    linear-gradient(90deg,#ffffff05 1px,transparent 1px);
+
+  background-size:42px 42px;
+}
+
+.orb{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(80px);
+  pointer-events:none;
+  opacity:.28;
+  animation:float 12s ease-in-out infinite alternate;
+}
+
+.o1{
+  width:330px;
+  height:330px;
+  background:#8b5cf6;
+  left:-170px;
+  top:-120px;
+}
+
+.o2{
+  width:300px;
+  height:300px;
+  background:#22d3ee;
+  right:-150px;
+  bottom:-100px;
+  animation-delay:-4s;
+}
+
+@keyframes float{
+  to{
+    transform:translate(45px,-30px) scale(1.08);
+  }
+}
+
+.shell{
+  width:min(1080px,92%);
+  margin:auto;
+  padding:22px 0 50px;
+  position:relative;
+  z-index:1;
+}
+
+/* TOP */
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.brand{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.logo{
+  width:45px;
+  height:45px;
+  border-radius:15px;
+
+  display:grid;
+  place-items:center;
+
+  font-weight:1000;
+
+  background:
+    linear-gradient(135deg,var(--purple),var(--cyan));
+
+  box-shadow:
+    0 0 25px #8b5cf655,
+    inset 0 0 15px #ffffff20;
+}
+
+.brand b{
+  display:block;
+  font-size:14px;
+  letter-spacing:.13em;
+}
+
+.brand small{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:.12em;
+}
+
+.back{
+  height:43px;
+  padding:0 16px;
+
+  border:1px solid var(--line);
+  border-radius:14px;
+
+  background:#ffffff08;
+  color:#fff;
+
+  text-decoration:none;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+
+  transition:.3s;
+}
+
+.back:hover{
+  transform:translateY(-3px);
+  border-color:#22d3ee66;
+  box-shadow:
+    0 12px 30px #0008,
+    0 0 25px #22d3ee18;
+}
+
+/* HERO */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+
+  padding:35px;
+
+  border-radius:30px;
+  border:1px solid var(--line);
+
+  background:
+    linear-gradient(145deg,#151b31d9,#070b17ed);
+
+  box-shadow:
+    0 30px 90px #0008,
+    inset 0 1px 0 #ffffff08;
+
+  backdrop-filter:blur(25px);
+
+  animation:enter .7s ease both;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent 20%,
+      #ffffff08 45%,
+      transparent 62%
+    );
+
+  transform:translateX(-120%);
+  animation:sweep 8s infinite;
+}
+
+@keyframes sweep{
+  72%{
+    transform:translateX(120%);
+  }
+  100%{
+    transform:translateX(120%);
+  }
+}
+
+@keyframes enter{
+  from{
+    opacity:0;
+    transform:translateY(18px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.eyebrow{
+  color:#aeb8d0;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+h1{
+  margin:10px 0 9px;
+
+  font-size:clamp(32px,5vw,52px);
+  letter-spacing:-.055em;
+}
+
+h1 span{
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #c4b5fd,
+      #67e8f9
+    );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.subtitle{
+  margin:0;
+  max-width:680px;
+
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+/* UPLOAD CARD */
+
+.upload{
+  margin-top:30px;
+
+  padding:24px;
+
+  border:1px solid #ffffff12;
+  border-radius:23px;
+
+  background:
+    linear-gradient(145deg,#ffffff08,#ffffff03);
+
+  box-shadow:
+    inset 0 1px 0 #ffffff08,
+    0 20px 50px #0005;
+}
+
+.upload-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:18px;
+}
+
+.upload-title h2{
+  margin:0;
+  font-size:17px;
+}
+
+.secure{
+  padding:7px 10px;
+  border-radius:999px;
+
+  color:#a7f3d0;
+  background:#22c55e10;
+  border:1px solid #22c55e25;
+
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+/* TYPE SELECT */
+
+.select-wrap{
+  position:relative;
+}
+
+select{
+  width:100%;
+  height:50px;
+
+  appearance:none;
+
+  border:1px solid #ffffff12;
+  border-radius:15px;
+
+  background:#060a14;
+  color:#fff;
+
+  padding:0 45px 0 15px;
+
+  outline:none;
+
+  font-size:12px;
+
+  transition:.25s;
+}
+
+select:focus{
+  border-color:#8b5cf688;
+
+  box-shadow:
+    0 0 0 3px #8b5cf612,
+    0 0 30px #8b5cf620;
+}
+
+.select-wrap:after{
+  content:"⌄";
+  position:absolute;
+  right:16px;
+  top:13px;
+
+  color:#a78bfa;
+  pointer-events:none;
+}
+
+/* DROP AREA */
+
+.drop{
+  margin-top:14px;
+
+  min-height:150px;
+
+  border:1px dashed #8b5cf655;
+  border-radius:20px;
+
+  display:grid;
+  place-items:center;
+
+  text-align:center;
+
+  padding:20px;
+
+  background:
+    radial-gradient(circle at center,#8b5cf610,transparent 65%);
+
+  cursor:pointer;
+
+  transition:.35s;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.drop:hover{
+  border-color:#22d3ee99;
+
+  background:
+    radial-gradient(circle at center,#22d3ee12,transparent 65%);
+
+  box-shadow:
+    0 0 35px #22d3ee12,
+    inset 0 0 30px #8b5cf608;
+
+  transform:translateY(-2px);
+}
+
+.drop.drag{
+  border-color:#22d3ee;
+  box-shadow:
+    0 0 45px #22d3ee30,
+    inset 0 0 35px #22d3ee10;
+}
+
+.file-icon{
+  width:52px;
+  height:52px;
+
+  display:grid;
+  place-items:center;
+
+  margin:auto;
+
+  border-radius:17px;
+
+  font-size:23px;
+
+  background:
+    linear-gradient(135deg,#8b5cf633,#22d3ee22);
+
+  border:1px solid #ffffff12;
+
+  box-shadow:
+    0 0 30px #8b5cf625;
+}
+
+.drop b{
+  display:block;
+  margin-top:10px;
+  font-size:13px;
+}
+
+.drop span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+#file{
+  display:none;
+}
+
+/* SELECTED FILE */
+
+.selected{
+  margin-top:12px;
+
+  display:none;
+
+  padding:12px 14px;
+
+  border-radius:14px;
+  border:1px solid #22d3ee20;
+
+  background:#22d3ee08;
+
+  font-size:10px;
+}
+
+.selected.show{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.file-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.file-size{
+  color:#67e8f9;
+}
+
+/* UPLOAD BUTTON */
+
+.upload-btn{
+  width:100%;
+  height:52px;
+
+  margin-top:14px;
+
+  border:0;
+  border-radius:16px;
+
+  color:#fff;
+
+  font-weight:1000;
+  font-size:10px;
+  letter-spacing:.12em;
+
+  cursor:pointer;
+
+  background:
+    linear-gradient(
+      100deg,
+      #7c3aed,
+      #a855f7,
+      #06b6d4,
+      #7c3aed
+    );
+
+  background-size:300% 100%;
+
+  box-shadow:
+    0 14px 35px #8b5cf633,
+    0 0 30px #22d3ee10;
+
+  animation:gradientMove 5s ease infinite;
+
+  transition:.3s;
+}
+
+.upload-btn:hover{
+  transform:translateY(-3px) scale(1.01);
+
+  box-shadow:
+    0 20px 45px #8b5cf655,
+    0 0 40px #22d3ee25;
+}
+
+.upload-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+}
+
+@keyframes gradientMove{
+  0%,100%{
+    background-position:0% 50%;
+  }
+  50%{
+    background-position:100% 50%;
+  }
+}
+
+/* DOCUMENT LIST */
+
+.documents{
+  margin-top:28px;
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:13px;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:17px;
+}
+
+.count{
+  color:#a78bfa;
+  font-size:10px;
+  font-weight:900;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.doc{
+  position:relative;
+  overflow:hidden;
+
+  padding:19px;
+
+  border-radius:20px;
+  border:1px solid var(--line);
+
+  background:
+    linear-gradient(145deg,#ffffff08,#ffffff03);
+
+  transition:.35s;
+
+  animation:cardIn .5s ease both;
+}
+
+.doc:hover{
+  transform:translateY(-5px);
+
+  border-color:#8b5cf655;
+
+  box-shadow:
+    0 18px 45px #0008,
+    0 0 35px #8b5cf612;
+}
+
+.doc:before{
+  content:"";
+  position:absolute;
+
+  width:120px;
+  height:120px;
+
+  right:-55px;
+  top:-60px;
+
+  border-radius:50%;
+
+  background:#8b5cf633;
+  filter:blur(35px);
+}
+
+.doc-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.doc-icon{
+  width:42px;
+  height:42px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:14px;
+
+  background:#8b5cf615;
+  border:1px solid #8b5cf625;
+
+  font-size:18px;
+}
+
+.status{
+  padding:6px 9px;
+  border-radius:999px;
+
+  font-size:8px;
+  font-weight:1000;
+  letter-spacing:.07em;
+}
+
+.pending{
+  color:#fde68a;
+  background:#facc1512;
+  border:1px solid #facc1525;
+}
+
+.verified{
+  color:#86efac;
+  background:#22c55e12;
+  border:1px solid #22c55e25;
+}
+
+.rejected{
+  color:#fda4af;
+  background:#fb718512;
+  border:1px solid #fb718525;
+}
+
+.doc h3{
+  margin:15px 0 5px;
+  font-size:14px;
+}
+
+.doc-meta{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.6;
+}
+
+.reason{
+  margin-top:9px;
+  padding:9px;
+
+  border-radius:10px;
+
+  color:#fda4af;
+  background:#fb718508;
+  border:1px solid #fb718515;
+
+  font-size:9px;
+}
+
+.empty{
+  grid-column:1/-1;
+
+  padding:35px 20px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  border:1px dashed #ffffff12;
+  border-radius:20px;
+
+  background:#ffffff03;
+}
+
+.empty-icon{
+  font-size:30px;
+  margin-bottom:10px;
+}
+
+.empty b{
+  display:block;
+  color:#fff;
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+/* LOADING */
+
+.loading{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.spinner{
+  width:30px;
+  height:30px;
+
+  margin:0 auto 12px;
+
+  border-radius:50%;
+
+  border:2px solid #ffffff12;
+  border-top-color:#8b5cf6;
+  border-right-color:#22d3ee;
+
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+@keyframes cardIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+
+  left:50%;
+  bottom:24px;
+
+  transform:translate(-50%,25px);
+
+  opacity:0;
+
+  z-index:50;
+
+  max-width:90vw;
+
+  padding:12px 17px;
+
+  border:1px solid #ffffff12;
+  border-radius:14px;
+
+  background:#080d19f5;
+
+  box-shadow:
+    0 20px 60px #0009,
+    0 0 30px #8b5cf615;
+
+  font-size:10px;
+
+  transition:.3s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.footer{
+  text-align:center;
+  padding-top:22px;
+
+  color:#65718b;
+  font-size:9px;
+}
+
+@media(max-width:700px){
+
+  .shell{
+    width:94%;
+    padding-top:16px;
+  }
+
+  .hero{
+    padding:25px 17px;
+    border-radius:24px;
+  }
+
+  .brand b{
+    font-size:11px;
+  }
+
+  .brand small{
+    font-size:8px;
+  }
+
+  .back{
+    padding:0 12px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .upload{
+    padding:17px;
+  }
+}
+
+@media(max-width:430px){
+
+  .top{
+    align-items:flex-start;
+  }
+
+  .back{
+    height:40px;
+    font-size:9px;
+  }
+
+  h1{
+    font-size:35px;
+  }
+
+  .upload-title{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+
+<main class="shell">
+
+<header class="top">
+
+  <div class="brand">
+    <div class="logo">G</div>
+
+    <div>
+      <b>GOPI ONLINE SERVICE</b>
+      <small>SECURE DOCUMENT CENTER</small>
+    </div>
+  </div>
+
+  <a href="dashboard.html" class="back">
+    ← DASHBOARD
+  </a>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="eyebrow">
+    Private Document Vault
+  </div>
+
+  <h1>
+    My <span>Documents</span>
+  </h1>
+
+  <p class="subtitle">
+    Securely upload and manage your Aadhaar Card, PAN Card,
+    Voter ID and Certificates from one protected document space.
+  </p>
+
+
+  <!-- UPLOAD -->
+
+  <div class="upload">
+
+    <div class="upload-title">
+
+      <h2>Upload New Document</h2>
+
+      <div class="secure">
+        🔒 PRIVATE & SECURE
+      </div>
+
+    </div>
+
+
+    <div class="select-wrap">
+
+      <select id="docType">
+
+        <option value="">
+          Select document type
+        </option>
+
+        <option value="Aadhaar Card">
+          🪪 Aadhaar Card
+        </option>
+
+        <option value="PAN Card">
+          💳 PAN Card
+        </option>
+
+        <option value="Voter ID">
+          🗳️ Voter ID
+        </option>
+
+        <option value="Certificate">
+          🎓 Certificate
+        </option>
+
+        <option value="Other Document">
+          📄 Other Document
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="drop" id="drop">
+
+      <input
+        type="file"
+        id="file"
+        accept=".pdf,.jpg,.jpeg,.png"
+      >
+
+      <div>
+
+        <div class="file-icon">
+          ↑
+        </div>
+
+        <b>
+          Tap to choose your document
+        </b>
+
+        <span>
+          PDF, JPG or PNG • Maximum 10MB
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="selected" id="selected">
+
+      <span class="file-name" id="fileName">
+        Document
+      </span>
+
+      <span class="file-size" id="fileSize">
+        0 KB
+      </span>
+
+    </div>
+
+
+    <button
+      class="upload-btn"
+      id="uploadBtn"
+    >
+      UPLOAD DOCUMENT
+    </button>
+
+  </div>
+
+
+  <!-- DOCUMENTS -->
+
+  <section class="documents">
+
+    <div class="section-head">
+
+      <h2>
+        Your Documents
+      </h2>
+
+      <span
+        class="count"
+        id="count"
+      >
+        0 DOCUMENTS
+      </span>
+
+    </div>
+
+    <div
+      class="grid"
+      id="documentGrid"
+    >
+
+      <div class="loading">
+
+        <div class="spinner"></div>
+
+        Loading your documents...
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<footer class="footer">
+  © 2026 GOPI ONLINE SERVICE • YOUR DOCUMENTS, YOUR CONTROL
+</footer>
+
+</main>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+
+const $ = id =>
+  document.getElementById(id);
+
+
+let currentUser = null;
+let selectedFile = null;
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+function toast(message){
+
+  const el = $("toast");
+
+  el.textContent = message;
+
+  el.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(
+      () => el.classList.remove("show"),
+      3000
+    );
+}
+
+
+/* =========================================
+   AUTH
+========================================= */
+
+async function loadUser(){
+
+  const {data,error} =
+    await supabase.auth.getSession();
+
+  if(
+    error ||
+    !data.session?.user
+  ){
+
+    location.replace("index.html");
+
+    return;
+  }
+
+  currentUser =
+    data.session.user;
+
+  loadDocuments();
+}
+
+
+/* =========================================
+   FILE SELECT
+========================================= */
+
+$("drop").onclick = () =>
+  $("file").click();
+
+
+$("file").addEventListener(
+  "change",
+  event => {
+
+    const file =
+      event.target.files[0];
+
+    handleFile(file);
+  }
+);
+
+
+function handleFile(file){
+
+  if(!file)
+    return;
+
+  const allowed = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png"
+  ];
+
+  if(!allowed.includes(file.type)){
+
+    toast(
+      "❌ Please select PDF, JPG or PNG."
+    );
+
+    $("file").value = "";
+
+    return;
+  }
+
+
+  if(file.size > 10 * 1024 * 1024){
+
+    toast(
+      "❌ File must be smaller than 10MB."
+    );
+
+    $("file").value = "";
+
+    return;
+  }
+
+
+  selectedFile = file;
+
+
+  $("fileName").textContent =
+    file.name;
+
+  $("fileSize").textContent =
+    formatSize(file.size);
+
+  $("selected").classList.add("show");
+}
+
+
+function formatSize(bytes){
+
+  if(bytes < 1024)
+    return bytes + " B";
+
+  if(bytes < 1024*1024)
+    return (
+      (bytes/1024).toFixed(1)
+      + " KB"
+    );
+
+  return (
+    (bytes/1024/1024).toFixed(2)
+    + " MB"
+  );
+}
+
+
+/* =========================================
+   DRAG & DROP
+========================================= */
+
+const drop = $("drop");
+
+drop.addEventListener(
+  "dragover",
+  e => {
+
+    e.preventDefault();
+
+    drop.classList.add("drag");
+  }
+);
+
+drop.addEventListener(
+  "dragleave",
+  () =>
+    drop.classList.remove("drag")
+);
+
+drop.addEventListener(
+  "drop",
+  e => {
+
+    e.preventDefault();
+
+    drop.classList.remove("drag");
+
+    const file =
+      e.dataTransfer.files[0];
+
+    handleFile(file);
+  }
+);
+
+
+/* =========================================
+   UPLOAD
+========================================= */
+
+$("uploadBtn").onclick =
+async () => {
+
+  if(!currentUser){
+
+    toast("Please login first.");
+
+    return;
+  }
+
+
+  const docType =
+    $("docType").value;
+
+
+  if(!docType){
+
+    toast(
+      "⚠️ Please select document type."
+    );
+
+    return;
+  }
+
+
+  if(!selectedFile){
+
+    toast(
+      "⚠️ Please choose a document."
+    );
+
+    return;
+  }
+
+
+  const btn =
+    $("uploadBtn");
+
+  btn.disabled = true;
+
+  btn.textContent =
+    "UPLOADING…";
+
+
+  try{
+
+    const ext =
+      selectedFile.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+
+    const safeType =
+      docType
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g,"-");
+
+
+    const filePath =
+      currentUser.id
+      + "/"
+      + safeType
+      + "-"
+      + Date.now()
+      + "."
+      + ext;
+
+
+    /* Upload to PRIVATE bucket */
+
+    const {error:uploadError} =
+      await supabase
+        .storage
+        .from("customer-documents")
+        .upload(
+          filePath,
+          selectedFile,
+          {
+            cacheControl:"3600",
+            upsert:false
+          }
+        );
+
+
+    if(uploadError)
+      throw uploadError;
+
+
+    /* Save metadata */
+
+    const {error:dbError} =
+      await supabase
+        .from("documents")
+        .insert({
+
+          user_id:
+            currentUser.id,
+
+          doc_type:
+            docType,
+
+          file_name:
+            selectedFile.name,
+
+          file_path:
+            filePath,
+
+          file_size:
+            selectedFile.size,
+
+          mime_type:
+            selectedFile.type,
+
+          status:
+            "pending"
+        });
+
+
+    if(dbError){
+
+      /* cleanup uploaded file
+         if database insert fails */
+
+      await supabase
+        .storage
+        .from("customer-documents")
+        .remove([filePath]);
+
+      throw dbError;
+    }
+
+
+    toast(
+      "✅ Document uploaded successfully."
+    );
+
+
+    $("docType").value = "";
+
+    $("file").value = "";
+
+    selectedFile = null;
+
+    $("selected")
+      .classList.remove("show");
+
+
+    await loadDocuments();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    toast(
+      "❌ Upload failed. Please try again."
+    );
+
+  }
+  finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "UPLOAD DOCUMENT";
+  }
+
+};
+
+
+/* =========================================
+   LOAD DOCUMENTS
+========================================= */
+
+async function loadDocuments(){
+
+  const grid =
+    $("documentGrid");
+
+
+  grid.innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      Loading your documents...
+    </div>
+  `;
+
+
+  const {data,error} =
+    await supabase
+      .from("documents")
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+
+  if(error){
+
+    console.error(error);
+
+    grid.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⚠️</div>
+        <b>Unable to load documents</b>
+        Please refresh and try again.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const docs = data || [];
+
+
+  $("count").textContent =
+    docs.length
+    + (
+      docs.length === 1
+      ? " DOCUMENT"
+      : " DOCUMENTS"
+    );
+
+
+  if(!docs.length){
+
+    grid.innerHTML = `
+      <div class="empty">
+
+        <div class="empty-icon">
+          📁
+        </div>
+
+        <b>
+          No documents yet
+        </b>
+
+        Upload your first document
+        using the secure uploader above.
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  grid.innerHTML =
+    docs
+      .map(
+        (doc,index) =>
+          createDocumentCard(
+            doc,
+            index
+          )
+      )
+      .join("");
+}
+
+
+/* =========================================
+   DOCUMENT CARD
+========================================= */
+
+function createDocumentCard(
+  doc,
+  index
+){
+
+  const status =
+    doc.status || "pending";
+
+
+  const statusText =
+    status.toUpperCase();
+
+
+  let statusClass =
+    "pending";
+
+
+  if(status === "verified")
+    statusClass = "verified";
+
+  if(status === "rejected")
+    statusClass = "rejected";
+
+
+  const date =
+    new Date(
+      doc.created_at
+    ).toLocaleString(
+      "en-IN",
+      {
+        dateStyle:"medium",
+        timeStyle:"short"
+      }
+    );
+
+
+  let icon = "📄";
+
+
+  if(doc.doc_type === "Aadhaar Card")
+    icon = "🪪";
+
+  else if(doc.doc_type === "PAN Card")
+    icon = "💳";
+
+  else if(doc.doc_type === "Voter ID")
+    icon = "🗳️";
+
+  else if(doc.doc_type === "Certificate")
+    icon = "🎓";
+
+
+  const reason =
+    doc.status === "rejected"
+    && doc.rejection_reason
+    ? `
+      <div class="reason">
+        ${escapeHTML(
+          doc.rejection_reason
+        )}
+      </div>
+    `
+    : "";
+
+
+  return `
+
+    <article
+      class="doc"
+      style="animation-delay:${index*60}ms"
+    >
+
+      <div class="doc-top">
+
+        <div class="doc-icon">
+          ${icon}
+        </div>
+
+        <span
+          class="status ${statusClass}"
+        >
+          ${statusText}
+        </span>
+
+      </div>
+
+
+      <h3>
+        ${escapeHTML(doc.doc_type)}
+      </h3>
+
+
+      <div class="doc-meta">
+
+        ${escapeHTML(doc.file_name)}
+        <br>
+
+        ${formatSize(
+          doc.file_size || 0
+        )}
+
+        • ${date}
+
+      </div>
+
+
+      ${reason}
+
+    </article>
+
+  `;
+}
+
+
+/* =========================================
+   BASIC HTML ESCAPE
+========================================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================
+   AUTH LISTENER
+========================================= */
+
+supabase.auth.onAuthStateChange(
+  (event,session) => {
+
+    if(
+      event === "SIGNED_OUT"
+      || !session
+    ){
+
+      location.replace(
+        "index.html"
+      );
+
+    }
+
+  }
+);
+
+
+await loadUser();
+
+</script>
+
+</body>
+</html>
