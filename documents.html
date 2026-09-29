@@ -806,7 +806,277 @@ select:focus{
   color:#65718b;
   font-size:9px;
 }
+/* =========================================
+   DOCUMENT ACTIONS
+========================================= */
 
+.doc-actions{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:9px;
+  margin-top:16px;
+}
+
+.delete-btn{
+  width:100%;
+  height:40px;
+
+  border-radius:12px;
+
+  border:1px solid #fb71852d;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fb718510,
+      #ef444408
+    );
+
+  color:#fda4af;
+
+  font-size:9px;
+  font-weight:1000;
+  letter-spacing:.08em;
+
+  cursor:pointer;
+
+  transition:.3s;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.delete-btn:before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent,
+      #fb718514,
+      transparent
+    );
+
+  transform:translateX(-100%);
+  transition:.5s;
+}
+
+.delete-btn:hover:before{
+  transform:translateX(100%);
+}
+
+.delete-btn:hover{
+  transform:translateY(-2px);
+
+  border-color:#fb718580;
+
+  color:#fecdd3;
+
+  box-shadow:
+    0 10px 30px #fb71851c,
+    0 0 25px #fb718512;
+}
+
+.delete-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+
+/* =========================================
+   DELETE MODAL
+========================================= */
+
+.delete-modal{
+  position:fixed;
+  inset:0;
+
+  display:grid;
+  place-items:center;
+
+  padding:20px;
+
+  background:#02040ab8;
+
+  backdrop-filter:blur(12px);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:.25s;
+
+  z-index:100;
+}
+
+.delete-modal.open{
+  opacity:1;
+  visibility:visible;
+}
+
+.delete-box{
+  width:min(410px,92vw);
+
+  padding:26px;
+
+  border-radius:25px;
+
+  border:1px solid #fb71852b;
+
+  background:
+    linear-gradient(
+      145deg,
+      #15111ff5,
+      #080b15f8
+    );
+
+  box-shadow:
+    0 35px 100px #000c,
+    0 0 55px #fb718512;
+
+  transform:
+    translateY(15px)
+    scale(.96);
+
+  transition:.3s;
+}
+
+.delete-modal.open .delete-box{
+  transform:none;
+}
+
+.delete-icon{
+  width:55px;
+  height:55px;
+
+  display:grid;
+  place-items:center;
+
+  margin-bottom:15px;
+
+  border-radius:17px;
+
+  background:#fb718512;
+
+  border:1px solid #fb71852d;
+
+  font-size:23px;
+
+  box-shadow:
+    0 0 30px #fb71851c;
+}
+
+.delete-box h3{
+  margin:0;
+
+  font-size:19px;
+}
+
+.delete-box p{
+  margin:9px 0 0;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  line-height:1.65;
+}
+
+.delete-document-name{
+  margin-top:13px;
+
+  padding:11px 12px;
+
+  border-radius:12px;
+
+  background:#ffffff06;
+
+  border:1px solid #ffffff0d;
+
+  color:#e5e7eb;
+
+  font-size:10px;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+}
+
+.delete-modal-actions{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+
+  margin-top:20px;
+}
+
+.modal-btn{
+  height:44px;
+
+  border-radius:13px;
+
+  border:1px solid var(--line);
+
+  background:#ffffff07;
+
+  color:#fff;
+
+  font-size:9px;
+
+  font-weight:1000;
+
+  letter-spacing:.06em;
+
+  cursor:pointer;
+
+  transition:.25s;
+}
+
+.modal-btn:hover{
+  transform:translateY(-2px);
+
+  background:#ffffff0d;
+}
+
+.modal-delete{
+  border-color:#fb71854d;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fb71851c,
+      #ef444414
+    );
+
+  color:#fda4af;
+}
+
+.modal-delete:hover{
+  border-color:#fb7185aa;
+
+  box-shadow:
+    0 10px 30px #fb718520;
+}
+
+.modal-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+}
+
+@media(max-width:430px){
+
+  .delete-modal-actions{
+    grid-template-columns:1fr;
+  }
+
+}
 @media(max-width:700px){
 
   .shell{
@@ -1052,7 +1322,59 @@ select:focus{
   class="toast"
   id="toast"
 ></div>
+<!-- DELETE CONFIRMATION MODAL -->
 
+<div
+  class="delete-modal"
+  id="deleteModal"
+  aria-hidden="true"
+>
+
+  <div class="delete-box">
+
+    <div class="delete-icon">
+      🗑
+    </div>
+
+    <h3>
+      Delete this document?
+    </h3>
+
+    <p>
+      This will permanently remove your document
+      from your account. This action cannot be undone.
+    </p>
+
+    <div
+      class="delete-document-name"
+      id="deleteDocumentName"
+    >
+      Document
+    </div>
+
+    <div class="delete-modal-actions">
+
+      <button
+        class="modal-btn"
+        id="cancelDelete"
+        type="button"
+      >
+        CANCEL
+      </button>
+
+      <button
+        class="modal-btn modal-delete"
+        id="confirmDelete"
+        type="button"
+      >
+        DELETE PERMANENTLY
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
 <script type="module">
 
@@ -1065,6 +1387,7 @@ const $ = id =>
 
 let currentUser = null;
 let selectedFile = null;
+let documentToDelete = null;
 
 
 /* =========================================
@@ -1511,6 +1834,246 @@ async function loadDocuments(){
       .join("");
 }
 
+/* =========================================
+   DELETE DOCUMENT
+========================================= */
+
+window.openDeleteModal = function(
+  documentId,
+  fileName
+){
+
+  documentToDelete = {
+    id: documentId,
+    fileName: fileName
+  };
+
+
+  $("deleteDocumentName").textContent =
+    fileName || "Selected document";
+
+
+  $("deleteModal")
+    .classList.add("open");
+
+
+  $("deleteModal")
+    .setAttribute(
+      "aria-hidden",
+      "false"
+    );
+};
+
+
+function closeDeleteModal(){
+
+  $("deleteModal")
+    .classList.remove("open");
+
+
+  $("deleteModal")
+    .setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+
+  documentToDelete = null;
+}
+
+
+$("cancelDelete").onclick =
+  closeDeleteModal;
+
+
+$("deleteModal").onclick =
+  event => {
+
+    if(
+      event.target ===
+      $("deleteModal")
+    ){
+
+      closeDeleteModal();
+
+    }
+
+  };
+
+
+$("confirmDelete").onclick =
+async () => {
+
+  if(
+    !documentToDelete ||
+    !currentUser
+  ){
+
+    toast(
+      "Unable to delete document."
+    );
+
+    return;
+  }
+
+
+  const btn =
+    $("confirmDelete");
+
+
+  btn.disabled = true;
+
+  btn.textContent =
+    "DELETING…";
+
+
+  try{
+
+    /*
+      First get the document record.
+
+      We also check user_id on the client,
+      while Supabase RLS provides the real
+      security protection.
+    */
+
+    const {data:doc,error:findError} =
+      await supabase
+        .from("documents")
+        .select(
+          "id,user_id,file_path,file_name"
+        )
+        .eq(
+          "id",
+          documentToDelete.id
+        )
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .maybeSingle();
+
+
+    if(findError)
+      throw findError;
+
+
+    if(!doc){
+
+      toast(
+        "❌ Document not found."
+      );
+
+      closeDeleteModal();
+
+      return;
+    }
+
+
+    /*
+      Delete the database record first.
+
+      RLS guarantees that the customer
+      can only delete their own record.
+    */
+
+    const {error:dbError} =
+      await supabase
+        .from("documents")
+        .delete()
+        .eq(
+          "id",
+          doc.id
+        )
+        .eq(
+          "user_id",
+          currentUser.id
+        );
+
+
+    if(dbError)
+      throw dbError;
+
+
+    /*
+      Then delete the actual file
+      from the PRIVATE Storage bucket.
+    */
+
+    if(doc.file_path){
+
+      const {
+        error:storageError
+      } =
+        await supabase
+          .storage
+          .from("customer-documents")
+          .remove([
+            doc.file_path
+          ]);
+
+
+      if(storageError){
+
+        console.error(
+          "Storage delete error:",
+          storageError
+        );
+
+        /*
+          Database record is already deleted,
+          so do not show a false failure.
+        */
+
+        toast(
+          "⚠️ Document removed, but storage cleanup needs attention."
+        );
+
+      }else{
+
+        toast(
+          "✅ Document deleted successfully."
+        );
+
+      }
+
+    }else{
+
+      toast(
+        "✅ Document deleted successfully."
+      );
+
+    }
+
+
+    closeDeleteModal();
+
+    await loadDocuments();
+
+  }
+  catch(error){
+
+    console.error(
+      "Delete document error:",
+      error
+    );
+
+
+    toast(
+      "❌ Delete failed. Please try again."
+    );
+
+  }
+  finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "DELETE PERMANENTLY";
+
+  }
+
+};
 
 /* =========================================
    DOCUMENT CARD
@@ -1535,6 +2098,7 @@ function createDocumentCard(
 
   if(status === "verified")
     statusClass = "verified";
+
 
   if(status === "rejected")
     statusClass = "rejected";
@@ -1623,6 +2187,22 @@ function createDocumentCard(
 
 
       ${reason}
+
+
+      <div class="doc-actions">
+
+        <button
+          class="delete-btn"
+          type="button"
+          onclick="openDeleteModal(
+            '${escapeHTML(doc.id)}',
+            '${escapeHTML(doc.file_name)}'
+          )"
+        >
+          🗑 DELETE DOCUMENT
+        </button>
+
+      </div>
 
     </article>
 
