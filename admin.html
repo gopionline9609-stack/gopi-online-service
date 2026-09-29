@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>GOPI ONLINE SERVICE • Admin Control</title>
+<meta name="theme-color" content="#050711">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+:root{--bg:#050711;--panel:rgba(15,20,36,.82);--text:#f7faff;--muted:#8996ad;--line:rgba(255,255,255,.085);--blue:#4b86ff;--cyan:#24d8ff;--violet:#9667ff;--green:#45e3a0;--amber:#ffc75c;--red:#ff7085}
+*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;font-family:"DM Sans",sans-serif;color:var(--text);background:var(--bg)}body{overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.38;background-image:linear-gradient(rgba(255,255,255,.021) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.021) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle,#000 12%,transparent 84%)}
+.orb{position:fixed;border-radius:50%;filter:blur(85px);pointer-events:none;z-index:0}.a{width:320px;height:320px;left:-140px;top:-120px;background:rgba(70,110,255,.24);animation:f1 9s ease-in-out infinite alternate}.b{width:300px;height:300px;right:-130px;bottom:-120px;background:rgba(31,211,255,.15);animation:f2 11s ease-in-out infinite alternate}.c{width:170px;height:170px;left:45%;top:45%;background:rgba(150,92,255,.08);animation:pulse 5s ease-in-out infinite}
+@keyframes f1{to{transform:translate(70px,60px) scale(1.1)}}@keyframes f2{to{transform:translate(-60px,-50px) scale(1.08)}}@keyframes pulse{50%{opacity:.5;transform:scale(1.18)}}@keyframes in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}@keyframes drop{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.page{width:min(1080px,94vw);margin:auto;padding:18px 0 45px;position:relative;z-index:2}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;animation:drop .6s both}.brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:800 15px Manrope;background:linear-gradient(135deg,#4b86ff,#795fff 55%,#22d8ff);box-shadow:0 0 30px rgba(73,133,255,.4),inset 0 1px 0 #ffffff55}.brand strong{font:800 15px Manrope;letter-spacing:.4px}.brand small{display:block;color:#7e8ca5;font-size:10px;margin-top:2px}.top-actions{display:flex;gap:8px}.btn{border:1px solid var(--line);background:rgba(255,255,255,.045);color:#dce7f8;border-radius:12px;padding:10px 12px;font-weight:800;font-size:10px;cursor:pointer;transition:.25s}.btn:hover{transform:translateY(-2px);border-color:#4b86ff66;box-shadow:0 0 24px #4b86ff18}.btn.primary{background:linear-gradient(100deg,#416fff,#755eff,#1ccff1);background-size:180% 100%;border:0;box-shadow:0 12px 30px #416fff22;animation:gradient 4s infinite}.btn.danger{color:#ff9cab;border-color:#ff718522;background:#ff718508}@keyframes gradient{50%{background-position:100% 0}}
+.hero{text-align:center;padding:28px 8px 22px;animation:in .7s .05s both}.badge{display:inline-flex;gap:7px;align-items:center;padding:7px 11px;border-radius:999px;color:#a8caff;background:#4b86ff0c;border:1px solid #4b86ff2b;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase}.live{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green);animation:blink 1.5s infinite}@keyframes blink{50%{opacity:.4;transform:scale(.75)}}h1{font:800 clamp(30px,6vw,48px)/1.05 Manrope;letter-spacing:-1.7px;margin:13px 0 8px}.hero p{color:var(--muted);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;animation:in .7s .1s both}.stat{padding:15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#151b30c7,#080b15e6);box-shadow:0 18px 50px #00000025;position:relative;overflow:hidden}.stat:after{content:"";position:absolute;width:70px;height:70px;right:-25px;top:-30px;border-radius:50%;background:#4b86ff13;filter:blur(18px)}.stat small{color:#75839b;font-size:9px;text-transform:uppercase;letter-spacing:.8px}.stat strong{display:block;font:800 23px Manrope;margin-top:5px}.stat.blue strong{color:#9bc2ff}.stat.green strong{color:#78efb5}.stat.amber strong{color:#ffd47d}.stat.violet strong{color:#c0a5ff}
+.panel{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,#151b30d1,#080b15eb);box-shadow:0 25px 75px #00000035;overflow:hidden;animation:in .7s .15s both}.tools{padding:15px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1.5fr 1fr auto auto;gap:9px}.input,.select,.note-input{width:100%;border:1px solid #ffffff10;outline:0;background:#03071199;color:#eef5ff;border-radius:12px;padding:11px 12px;font:600 11px "DM Sans";transition:.22s}.input:focus,.select:focus,.note-input:focus{border-color:#4b86ff80;box-shadow:0 0 0 3px #4b86ff12,0 0 25px #4b86ff0e}.select option{background:#0c1120;color:white}
+.orders{padding:14px;display:grid;gap:12px}.order{border:1px solid #ffffff0d;border-radius:20px;background:#ffffff025;overflow:hidden;animation:card .55s both;position:relative}@keyframes card{from{opacity:0;transform:translateY(15px) scale(.99)}to{opacity:1;transform:none}}
+.order-head{padding:16px;display:flex;justify-content:space-between;gap:15px;border-bottom:1px solid #ffffff08}.service{font:800 16px Manrope}.id{font-size:9px;color:#64728a;margin-top:5px;letter-spacing:.4px}.money{text-align:right}.money small{display:block;color:#68758c;font-size:8px;text-transform:uppercase}.money strong{font:800 20px Manrope;color:#82dfff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:13px 16px}.info{padding:9px 10px;border:1px solid #ffffff08;border-radius:11px;background:#00000018}.info small{display:block;color:#68768d;font-size:8px}.info b{display:block;color:#cbd7e8;font-size:10px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.controls{padding:13px 16px;border-top:1px solid #ffffff08;display:grid;grid-template-columns:1fr 1.4fr auto;gap:8px;align-items:end}.control label{display:block;color:#78869d;font-size:8px;text-transform:uppercase;letter-spacing:.6px;margin:0 0 5px}.status{width:100%;border:1px solid #4b86ff2b;background:#4b86ff09;color:#cfe0ff;border-radius:11px;padding:10px;font:800 10px "DM Sans";outline:0}.save{border:0;border-radius:11px;padding:11px 14px;color:white;font:800 10px Manrope;cursor:pointer;background:linear-gradient(100deg,#416fff,#765cff,#20cfff);background-size:180% 100%;box-shadow:0 10px 28px #416fff20;animation:gradient 4s infinite;transition:.22s}.save:hover{transform:translateY(-2px);box-shadow:0 14px 32px #416fff35}.save:active{transform:scale(.98)}.save.saved{background:linear-gradient(100deg,#22b878,#39d99a);animation:none}.note-row{padding:0 16px 14px;display:none}.note-row.show{display:block}.note-input{font-size:10px;min-height:55px;resize:vertical}
+.footer{padding:13px 16px;border-top:1px solid #ffffff08;color:#627087;font-size:9px;display:flex;justify-content:space-between;gap:10px}.admin-email{color:#9ebfff}
+.empty{padding:45px 20px;text-align:center;color:#77859b}.empty strong{display:block;color:#e6efff;font:800 18px Manrope;margin-bottom:7px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,25px) scale(.95);opacity:0;pointer-events:none;z-index:20;background:#0b1120ee;border:1px solid #ffffff16;padding:12px 15px;border-radius:13px;box-shadow:0 18px 45px #0007;font-size:10px;transition:.28s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
+.loading{padding:40px 20px;text-align:center;color:#8795ad;font-size:10px}
+@media(max-width:780px){.stats{grid-template-columns:repeat(2,1fr)}.tools{grid-template-columns:1fr 1fr}.tools .btn{width:100%}.grid{grid-template-columns:repeat(2,1fr)}.controls{grid-template-columns:1fr 1fr}.controls .save{grid-column:1/-1}}
+@media(max-width:520px){.page{width:92vw}.top-actions .btn:first-child{display:none}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:20px}.tools{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.controls{grid-template-columns:1fr}.controls .save{grid-column:auto}.order-head{align-items:center}.footer{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+<main class="page">
+<header class="top">
+<div class="brand"><div class="logo">GO</div><div><strong>GOPI ONLINE SERVICE</strong><small>Admin Control Center</small></div></div>
+<div class="top-actions"><button class="btn" onclick="render()">↻ Refresh</button><button class="btn" onclick="location.href='dashboard.html'">Dashboard</button></div>
+</header>
+<section class="hero"><span class="badge"><i class="live"></i> Private Admin Console</span><h1>ORDER CONTROL</h1><p>Review payments, update order status and keep every customer request moving.</p></section>
+<section class="stats">
+<div class="stat blue"><small>Total Orders</small><strong id="sTotal">0</strong></div>
+<div class="stat amber"><small>Verification</small><strong id="sVerify">0</strong></div>
+<div class="stat violet"><small>Processing</small><strong id="sProcess">0</strong></div>
+<div class="stat green"><small>Completed</small><strong id="sDone">0</strong></div>
+</section>
+<section class="panel">
+<div class="tools">
+<input class="input" id="search" placeholder="Search Order ID, service, UTR…" oninput="render()">
+<select class="select" id="filter" onchange="render()">
+<option value="all">All statuses</option><option value="verification">Payment Verification</option><option value="verified">Payment Verified</option><option value="processing">Processing</option><option value="documents">Documents Required</option><option value="on_hold">On Hold</option><option value="ready">Ready for Delivery</option><option value="completed">Completed</option><option value="failed">Payment Failed</option><option value="cancelled">Cancelled</option><option value="refunded">Refunded</option>
+</select>
+<button class="btn primary" onclick="exportOrders()">Export</button><button class="btn danger" onclick="clearAllOrders()">Delete All</button>
+</div>
+<div class="orders" id="orders"><div class="loading">Loading orders securely…</div></div>
+<div class="footer"><span>Admin account: <span class="admin-email">gopi742301@gmail.com</span></span><span>Supabase • Live order control</span></div>
+</section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {supabase} from "./supabase.js";
+
+const ADMIN_EMAIL="gopi742301@gmail.com";
+const STATUSES=[
+{key:"verification",label:"Payment Verification"},{key:"verified",label:"Payment Verified"},
+{key:"processing",label:"Processing"},{key:"documents",label:"Documents Required"},
+{key:"on_hold",label:"On Hold"},{key:"ready",label:"Ready for Delivery"},
+{key:"completed",label:"Completed"},{key:"failed",label:"Payment Failed"},
+{key:"cancelled",label:"Cancelled"},{key:"refunded",label:"Refunded"}
+];
+
+let currentOrders=[];
+let loading=false;
+let channel=null;
+
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function money(v){return "₹"+Number(v||0).toLocaleString("en-IN")}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),2400)}
+function labelFor(k){return STATUSES.find(x=>x.key===k)?.label||"Payment Verification"}
+function adminEmail(session){return (session?.user?.email||"").trim().toLowerCase()}
+
+async function adminGuard(){
+ const {data,error}=await supabase.auth.getSession();
+ if(error){console.error(error);showDenied("Could not verify admin session.");return false}
+ if(adminEmail(data.session)!==ADMIN_EMAIL.toLowerCase()){showDenied("Please sign in with the authorized admin account.");return false}
+ return true;
+}
+
+function showDenied(message){
+ document.body.innerHTML=`<main style="min-height:100vh;display:grid;place-items:center;padding:24px;background:#050711;color:#f7faff;font-family:DM Sans,Arial,sans-serif"><section style="width:min(430px,92vw);padding:28px;border:1px solid rgba(255,255,255,.1);border-radius:24px;background:rgba(15,20,36,.92);box-shadow:0 25px 80px rgba(0,0,0,.45);text-align:center"><div style="font-size:34px;margin-bottom:12px">🔐</div><h2 style="font-family:Manrope,Arial,sans-serif;margin-bottom:8px">Admin Access Required</h2><p style="color:#8d9ab0;font-size:12px;line-height:1.6;margin-bottom:18px">${esc(message)}</p><p style="color:#9fc2ff;font-size:11px;margin-bottom:18px">Authorized: ${ADMIN_EMAIL}</p><button onclick="location.href='index.html'" style="border:0;border-radius:12px;padding:12px 18px;color:#fff;font-weight:800;background:linear-gradient(100deg,#416fff,#765cff,#20cfff);cursor:pointer">Go to Login</button></section></main>`;
+}
+
+async function getOrders(){
+ const {data,error}=await supabase.from("orders").select("*").order("created_at",{ascending:false});
+ if(error){
+   console.error("Supabase orders load error:",error);
+   toast("Could not load orders");
+   return null;
+ }
+ return data||[];
+}
+
+function updateStats(all){
+ $("sTotal").textContent=all.length;
+ $("sVerify").textContent=all.filter(o=>o.status_key==="verification").length;
+ $("sProcess").textContent=all.filter(o=>o.status_key==="processing").length;
+ $("sDone").textContent=all.filter(o=>o.status_key==="completed").length;
+}
+
+function renderCards(all){
+ const q=$("search").value.trim().toLowerCase();
+ const f=$("filter").value;
+ const list=all.filter(o=>{
+   const hay=[o.order_id,o.service,o.utr,o.status,o.user_email,o.user_id].join(" ").toLowerCase();
+   return (!q||hay.includes(q))&&(f==="all"||o.status_key===f);
+ });
+ const box=$("orders");
+ if(!list.length){
+   box.innerHTML='<div class="empty"><strong>No matching orders</strong>Try another search or status filter.</div>';
+   return;
+ }
+ box.innerHTML=list.map((o,i)=>{
+   const oid=encodeURIComponent(String(o.order_id||""));
+   return `<article class="order" style="animation-delay:${Math.min(i*55,350)}ms">
+<div class="order-head"><div><div class="service">${esc(o.service)}</div><div class="id">ORDER ID • ${esc(o.order_id)}</div></div><div class="money"><small>Total</small><strong>${money(o.total)}</strong></div></div>
+<div class="grid">
+<div class="info"><small>Unit Price</small><b>${money(o.price)}</b></div>
+<div class="info"><small>Quantity</small><b>${esc(o.quantity)}</b></div>
+<div class="info"><small>UTR</small><b title="${esc(o.utr||"")}">${esc(o.utr||"—")}</b></div>
+<div class="info"><small>Customer</small><b title="${esc(o.user_email||o.user_id||"")}">${esc(o.user_email||o.user_id||"—")}</b></div>
+</div>
+<div class="controls">
+<div class="control"><label>Order Status</label><select class="status" id="st-${oid}">${STATUSES.map(s=>`<option value="${s.key}" ${s.key===(o.status_key||"verification")?"selected":""}>${s.label}</option>`).join("")}</select></div>
+<div class="control"><label>Admin Note</label><input class="note-input" id="nt-${oid}" value="${esc(o.admin_note||"")}" placeholder="Optional customer/order note"></div>
+<button class="save" id="sv-${oid}" onclick="updateOrder(decodeURIComponent('${oid}'))">Save Changes</button>
+</div>
+</article>`;
+ }).join("");
+}
+
+async function render(){
+ if(loading)return;
+ loading=true;
+ try{
+   const all=await getOrders();
+   if(all===null)return;
+   currentOrders=all;
+   updateStats(all);
+   renderCards(all);
+ }finally{loading=false}
+}
+
+window.render=render;
+
+window.updateOrder=async function(id){
+ const key=encodeURIComponent(String(id));
+ const st=$("st-"+key),nt=$("nt-"+key),btn=$("sv-"+key);
+ if(!st||!btn)return;
+ btn.disabled=true;btn.textContent="Saving…";
+ const {data:{session}}=await supabase.auth.getSession();
+ if(adminEmail(session)!==ADMIN_EMAIL.toLowerCase()){toast("Admin session expired");location.href="index.html";return}
+ const {error}=await supabase.from("orders").update({
+   status_key:st.value,
+   status:labelFor(st.value),
+   admin_note:nt?.value.trim()||null
+ }).eq("order_id",id);
+ if(error){
+   console.error("Supabase update error:",error);
+   toast("Update failed — check orders RLS");
+   btn.disabled=false;btn.textContent="Save Changes";return;
+ }
+ btn.textContent="✓ Saved";btn.classList.add("saved");toast("Order status updated");
+ setTimeout(()=>render(),650);
+};
+
+window.exportOrders=async function(){
+ const data=await getOrders();
+ if(data===null)return;
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gopi-orders-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);toast("Orders exported");
+};
+
+window.clearAllOrders=async function(){
+ if(!confirm("Delete ALL orders from the database? This cannot be undone."))return;
+ const {data:{session}}=await supabase.auth.getSession();
+ if(adminEmail(session)!==ADMIN_EMAIL.toLowerCase()){toast("Admin session expired");return}
+ const {error}=await supabase.from("orders").delete().not("order_id","is",null);
+ if(error){console.error(error);toast("Delete failed — check admin RLS");return}
+ toast("All orders deleted");render();
+};
+
+if(await adminGuard()){
+ await render();
+ channel=supabase.channel("orders-admin-live-v2")
+   .on("postgres_changes",{event:"*",schema:"public",table:"orders"},()=>render())
+   .subscribe(status=>{if(status==="CHANNEL_ERROR")console.warn("Realtime channel error")});
+ window.addEventListener("beforeunload",()=>{if(channel)supabase.removeChannel(channel)});
+ supabase.auth.onAuthStateChange((_event,session)=>{
+   if(adminEmail(session)!==ADMIN_EMAIL.toLowerCase())location.href="index.html";
+ });
+}
+</script>
+</body>
+</html>

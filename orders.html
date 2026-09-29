@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GOPI ONLINE SERVICE • My Orders</title>
+<meta name="theme-color" content="#050711">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
+:root{
+  --bg:#050711;--panel:rgba(14,19,34,.78);--panel2:rgba(9,13,25,.92);
+  --text:#f6f9ff;--muted:#8996ad;--line:rgba(255,255,255,.085);
+  --blue:#4c86ff;--cyan:#28d9ff;--violet:#9668ff;--green:#42e29b;
+  --amber:#ffca62;--red:#ff7185;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:"DM Sans",system-ui,sans-serif;color:var(--text);background:var(--bg)}
+body{overflow-x:hidden;position:relative}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.38;
+  background-image:linear-gradient(rgba(255,255,255,.021) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.021) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:radial-gradient(circle,#000 12%,transparent 84%);
+}
+.orb{position:fixed;border-radius:50%;filter:blur(85px);pointer-events:none;z-index:0}
+.orb.a{width:310px;height:310px;left:-130px;top:-120px;background:rgba(69,111,255,.25);animation:floatA 9s ease-in-out infinite alternate}
+.orb.b{width:290px;height:290px;right:-120px;bottom:-120px;background:rgba(27,210,255,.16);animation:floatB 11s ease-in-out infinite alternate}
+.orb.c{width:160px;height:160px;left:42%;top:45%;background:rgba(150,92,255,.09);animation:pulse 5s ease-in-out infinite}
+@keyframes floatA{to{transform:translate(65px,55px) scale(1.1)}}
+@keyframes floatB{to{transform:translate(-55px,-45px) scale(1.08)}}
+@keyframes pulse{50%{opacity:.5;transform:scale(1.18)}}
+
+.page{width:min(820px,94vw);margin:auto;padding:18px 0 42px;position:relative;z-index:2}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;animation:drop .6s ease both}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{
+  width:43px;height:43px;border-radius:14px;display:grid;place-items:center;
+  font-family:"Manrope",sans-serif;font-weight:800;letter-spacing:-1px;
+  background:linear-gradient(135deg,#4a85ff,#795fff 55%,#22d8ff);
+  box-shadow:0 0 30px rgba(72,132,255,.4),inset 0 1px 0 rgba(255,255,255,.32)
+}
+.brand strong{font-family:"Manrope",sans-serif;font-size:15px;letter-spacing:.45px}
+.brand small{display:block;color:#7e8ba3;font-size:10px;margin-top:2px}
+.back{
+  border:1px solid var(--line);background:rgba(255,255,255,.045);color:#dce7f8;
+  border-radius:13px;padding:10px 13px;font-weight:800;cursor:pointer;transition:.25s
+}
+.back:hover{transform:translateY(-2px);border-color:rgba(75,135,255,.45);box-shadow:0 0 25px rgba(75,135,255,.12)}
+
+.hero{text-align:center;padding:28px 8px 22px;animation:fadeUp .7s .06s both}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;
+  border:1px solid rgba(77,141,255,.2);background:rgba(77,141,255,.065);
+  color:#9bc3ff;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase
+}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#55e7a2;box-shadow:0 0 14px #55e7a2;animation:blink 1.5s infinite}
+@keyframes blink{50%{opacity:.42;transform:scale(.75)}}
+h1{font-family:"Manrope",sans-serif;font-size:clamp(30px,6vw,47px);line-height:1.05;letter-spacing:-1.7px;margin:13px 0 9px}
+.hero p{color:var(--muted);font-size:12px;line-height:1.65}
+
+.toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;
+  animation:fadeUp .7s .12s both
+}
+.order-count{
+  color:#9aa8be;font-size:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);
+  border-radius:11px;padding:8px 10px
+}
+.refresh{
+  border:1px solid rgba(77,141,255,.18);background:rgba(77,141,255,.055);color:#bcd4ff;
+  border-radius:11px;padding:8px 11px;font-size:10px;font-weight:800;cursor:pointer;transition:.25s
+}
+.refresh:hover{transform:translateY(-2px);box-shadow:0 0 22px rgba(77,141,255,.13)}
+
+.empty{
+  display:none;text-align:center;padding:45px 20px;border:1px solid var(--line);border-radius:24px;
+  background:linear-gradient(145deg,rgba(20,26,46,.78),rgba(7,10,18,.9));box-shadow:0 25px 70px rgba(0,0,0,.35);
+  animation:fadeUp .65s both
+}
+.empty-icon{font-size:38px;margin-bottom:12px;filter:drop-shadow(0 0 18px rgba(77,141,255,.35))}
+.empty h2{font-family:"Manrope",sans-serif;font-size:19px}
+.empty p{color:#7e8ba2;font-size:11px;margin:7px auto 17px;max-width:360px;line-height:1.6}
+.primary{
+  display:inline-block;text-decoration:none;color:white;background:linear-gradient(100deg,#416fff,#755eff,#1ccff1);
+  background-size:180% 100%;padding:12px 16px;border-radius:13px;font-weight:800;font-size:11px;
+  box-shadow:0 12px 32px rgba(65,102,255,.22);animation:gradientMove 4s ease infinite
+}
+@keyframes gradientMove{50%{background-position:100% 0}}
+
+.orders{display:grid;gap:14px}
+.order-card{
+  border:1px solid var(--line);border-radius:25px;overflow:hidden;
+  background:linear-gradient(145deg,rgba(20,27,48,.83),rgba(7,10,19,.91));
+  box-shadow:0 22px 70px rgba(0,0,0,.34),0 0 45px rgba(73,109,255,.045);
+  position:relative;animation:cardIn .7s both
+}
+.order-card:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(125deg,rgba(255,255,255,.055),transparent 27%,transparent 70%,rgba(34,210,255,.025))
+}
+.order-top{padding:18px 18px 15px;border-bottom:1px solid var(--line)}
+.order-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.service{font-family:"Manrope",sans-serif;font-weight:800;font-size:18px;line-height:1.25}
+.order-id{color:#69778e;font-size:9px;margin-top:5px;letter-spacing:.35px}
+.amount{text-align:right;white-space:nowrap}
+.amount small{display:block;color:#707d93;font-size:9px;text-transform:uppercase;letter-spacing:.8px}
+.amount strong{
+  display:block;font-family:"Manrope",sans-serif;font-size:22px;margin-top:2px;
+  background:linear-gradient(90deg,#fff,#76dfff);-webkit-background-clip:text;color:transparent
+}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.chip{font-size:9px;color:#b7c4d8;border:1px solid var(--line);background:rgba(255,255,255,.032);padding:7px 8px;border-radius:9px}
+.status-chip{color:#86f0b5;background:rgba(66,226,155,.065);border-color:rgba(66,226,155,.15);display:inline-flex;align-items:center;gap:5px}
+.status-chip i{width:6px;height:6px;border-radius:50%;background:#4ce29c;box-shadow:0 0 10px #4ce29c;animation:blink 1.5s infinite}
+
+.tracking{padding:18px}
+.track-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.track-title strong{font-family:"Manrope",sans-serif;font-size:13px}
+.track-title span{font-size:9px;color:#68758d}
+.timeline{position:relative;padding-left:30px}
+.timeline:before{
+  content:"";position:absolute;left:9px;top:8px;bottom:8px;width:1px;
+  background:linear-gradient(to bottom,rgba(66,226,155,.8),rgba(77,141,255,.3),rgba(255,255,255,.08))
+}
+.step{position:relative;min-height:55px;padding:0 0 15px}
+.step:last-child{min-height:0;padding-bottom:0}
+.step-dot{
+  position:absolute;left:-26px;top:2px;width:19px;height:19px;border-radius:50%;
+  display:grid;place-items:center;font-size:9px;font-weight:900;
+  border:1px solid rgba(255,255,255,.11);background:#11182a;color:#67758d
+}
+.step.done .step-dot{
+  color:#06140d;background:#4ce29c;border-color:#4ce29c;box-shadow:0 0 18px rgba(76,226,156,.35)
+}
+.step.current .step-dot{
+  color:#fff;background:linear-gradient(135deg,#477cff,#8162ff);border-color:#7198ff;
+  box-shadow:0 0 22px rgba(81,122,255,.4);animation:currentPulse 1.8s infinite
+}
+@keyframes currentPulse{50%{box-shadow:0 0 7px rgba(81,122,255,.15)}}
+.step-title{font-size:11px;font-weight:800;color:#dce5f4}
+.step-sub{font-size:9px;color:#6f7d94;margin-top:3px;line-height:1.45}
+.step.current .step-title{color:#a9c8ff}
+.step.future .step-title{color:#68758b}
+.step.future .step-sub{color:#56637a}
+
+.order-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;
+  border-top:1px solid var(--line);background:rgba(0,0,0,.12)
+}
+.time{font-size:9px;color:#66748b}
+.utr{font-size:9px;color:#8b9ab1}
+.utr b{color:#c6d3e5;letter-spacing:.3px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(17px)}to{opacity:1;transform:none}}
+@keyframes drop{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.985)}to{opacity:1;transform:none}}
+
+@media(max-width:560px){
+  .page{width:92vw;padding-top:14px}
+  .order-head{align-items:center}
+  .service{font-size:16px}
+  .amount strong{font-size:20px}
+  .tracking{padding:16px}
+  .order-top{padding:16px}
+  .order-foot{align-items:flex-start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+
+<main class="page">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">GO</div>
+      <div><strong>GOPI ONLINE SERVICE</strong><small>My Orders • Live Tracking</small></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="admin-btn" id="adminBtn" type="button" onclick="openAdmin()">⚡ Admin Panel</button>
+      <button class="back" type="button" onclick="history.back()">← Back</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <span class="eyebrow"><i class="live-dot"></i> Order Center</span>
+    <h1>MY ORDERS</h1>
+    <p>Track your submitted services, payment details and current order status in one place.</p>
+  </section>
+
+  <div class="toolbar">
+    <div class="order-count" id="orderCount">0 Orders</div>
+    <button class="refresh" type="button" onclick="renderOrders()">↻ Refresh</button>
+  </div>
+
+  <section class="empty" id="emptyState">
+    <div class="empty-icon">✦</div>
+    <h2>No orders yet</h2>
+    <p>Your submitted service orders will appear here automatically after UTR submission.</p>
+    <a class="primary" href="services.html">Browse Services</a>
+  </section>
+
+  <section class="orders" id="ordersList"></section>
+</main>
+
+<script type="module">
+import { supabase } from "./supabase.js";
+
+const ordersList=document.getElementById("ordersList");
+const emptyState=document.getElementById("emptyState");
+const orderCount=document.getElementById("orderCount");
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&#039;"}[c]))}
+function money(v){return "₹"+Number(v||0).toLocaleString("en-IN")}
+function formatDate(iso){try{return new Intl.DateTimeFormat("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}).format(new Date(iso))}catch(e){return "Recently submitted"}}
+function maskUTR(utr){const v=String(utr||"");return v.length<=8?v:v.slice(0,4)+"••••"+v.slice(-4)}
+function timeline(statusKey){
+ const steps=[
+  {key:"submitted",title:"Order Submitted",sub:"Service request created"},
+  {key:"verification",title:"Payment Verification",sub:"UTR submitted • verification pending"},
+  {key:"verified",title:"Payment Verified",sub:"Payment reference reviewed"},
+  {key:"processing",title:"Service Processing",sub:"Service work is in progress"},
+  {key:"documents",title:"Documents Required",sub:"Additional information may be needed"},
+  {key:"on_hold",title:"On Hold",sub:"Order temporarily paused"},
+  {key:"ready",title:"Ready for Delivery",sub:"Service output is ready"},
+  {key:"completed",title:"Completed",sub:"Service completed successfully"}
+ ];
+ const key=statusKey||"verification";let current=steps.findIndex(s=>s.key===key);
+ if(key==="failed"||key==="cancelled"||key==="refunded") return `<div class="step done"><div class="step-dot">✓</div><div class="step-title">Order Submitted</div><div class="step-sub">Service request created</div></div><div class="step current"><div class="step-dot">!</div><div class="step-title">${esc(key==="failed"?"Payment Failed":key==="cancelled"?"Cancelled":"Refunded")}</div><div class="step-sub">${esc(key==="failed"?"Payment verification did not complete.":key==="cancelled"?"Order was cancelled.":"Refund status recorded.")}</div></div>`;
+ if(current<0)current=1;
+ return steps.map((s,i)=>{const cls=i<current?"done":i===current?"current":"future";return `<div class="step ${cls}"><div class="step-dot">${cls==="done"?"✓":cls==="current"?"•":"○"}</div><div class="step-title">${esc(s.title)}</div><div class="step-sub">${esc(s.sub)}</div></div>`}).join("");
+}
+
+const ADMIN_EMAIL="gopi742301@gmail.com";
+let isAdmin=false;
+
+function openAdmin(){
+ if(!isAdmin){return;}
+ window.location.href="admin.html";
+}
+window.openAdmin=openAdmin;
+
+async function checkAdmin(user){
+ const email=String(user?.email||"").trim().toLowerCase();
+ isAdmin=email===ADMIN_EMAIL.toLowerCase();
+ const btn=document.getElementById("adminBtn");
+ if(btn) btn.style.display=isAdmin?"inline-flex":"none";
+}
+
+async function loadOrders(){
+ const {data:session,error:sessionError}=await supabase.auth.getSession();
+ if(sessionError||!session.session){location.href="index.html";return;}
+ const user=session.session.user;
+ await checkAdmin(user);
+ const {data,error}=await supabase.from("orders").select("*").eq("user_id",user.id).order("created_at",{ascending:false});
+ if(error){emptyState.style.display="block";ordersList.innerHTML=`<div style="padding:25px;color:#ff9cab;font-size:11px;text-align:center">Unable to load orders. Please make sure <b>orders_schema.sql</b> has been run in Supabase.</div>`;orderCount.textContent="0 Orders";return;}
+ const orders=data||[];orderCount.textContent=orders.length+(orders.length===1?" Order":" Orders");
+ if(!orders.length){emptyState.style.display="block";ordersList.innerHTML="";return;}
+ emptyState.style.display="none";
+ ordersList.innerHTML=orders.map((o,i)=>`<article class="order-card" style="animation-delay:${Math.min(i*70,420)}ms">
+  <div class="order-top"><div class="order-head"><div><div class="service">${esc(o.service)}</div><div class="order-id">ORDER ID • ${esc(o.order_id)}</div></div><div class="amount"><small>Total</small><strong>${money(o.total)}</strong></div></div>
+  <div class="chips"><span class="chip">${money(o.price)} × ${Number(o.quantity||1)}</span><span class="chip status-chip"><i></i>${esc(o.status||"Payment Verification")}</span></div></div>
+  <div class="tracking"><div class="track-title"><strong>Order Tracking</strong><span>${esc(formatDate(o.created_at))}</span></div><div class="timeline">${timeline(o.status_key)}</div></div>
+  ${o.admin_note?`<div style="padding:0 18px 13px;color:#93a2ba;font-size:9px;line-height:1.5">📝 ${esc(o.admin_note)}</div>`:""}
+  <div class="order-foot"><div class="time">Submitted ${esc(formatDate(o.created_at))}</div><div class="utr">UTR • <b>${esc(maskUTR(o.utr))}</b></div></div>
+ </article>`).join("");
+}
+
+window.renderOrders=loadOrders;
+supabase.auth.onAuthStateChange((_event, session)=>{
+  const user=session?.user;
+  if(user) checkAdmin(user);
+  else { isAdmin=false; const btn=document.getElementById("adminBtn"); if(btn) btn.style.display="none"; }
+});
+loadOrders();
+const channel=supabase.channel("orders-customer-live").on("postgres_changes",{event:"*",schema:"public",table:"orders"},()=>loadOrders()).subscribe();
+window.addEventListener("beforeunload",()=>supabase.removeChannel(channel));
+</script>
+</body>
+</html>

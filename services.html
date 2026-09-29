@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05060d">
+<title>Services • GOPI ONLINE SERVICE</title>
+
+<style>
+:root{
+  --bg:#05060d;
+  --panel:rgba(12,15,29,.72);
+  --panel2:rgba(19,23,42,.62);
+  --line:rgba(255,255,255,.10);
+  --line2:rgba(255,255,255,.16);
+  --text:#f7f8ff;
+  --muted:#9da7c0;
+  --violet:#8b5cf6;
+  --cyan:#22d3ee;
+  --pink:#ec4899;
+  --green:#34d399;
+  --gold:#f5c86a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+body{overflow-x:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+
+.bg{
+  position:fixed;inset:0;z-index:-5;overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 8%,rgba(139,92,246,.19),transparent 27%),
+    radial-gradient(circle at 88% 12%,rgba(34,211,238,.14),transparent 25%),
+    radial-gradient(circle at 55% 100%,rgba(236,72,153,.09),transparent 30%),
+    linear-gradient(145deg,#03040a 0%,#070914 48%,#04050b 100%);
+}
+.bg:before,.bg:after{
+  content:"";position:absolute;border-radius:50%;filter:blur(80px);
+  animation:orb 12s ease-in-out infinite alternate;
+}
+.bg:before{
+  width:430px;height:430px;left:-190px;top:18%;
+  background:rgba(139,92,246,.32);
+}
+.bg:after{
+  width:400px;height:400px;right:-180px;bottom:10%;
+  background:rgba(34,211,238,.22);animation-delay:-5s;
+}
+@keyframes orb{
+  from{transform:translate3d(0,0,0) scale(.92)}
+  to{transform:translate3d(40px,-35px,0) scale(1.08)}
+}
+
+.grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.017) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.017) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,black,transparent 92%);
+}
+
+.wrap{width:min(1180px,92%);margin:auto;padding:28px 0 48px}
+
+/* HEADER */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-bottom:22px;
+}
+.brand{
+  display:flex;align-items:center;gap:13px;
+}
+.brand-mark{
+  width:48px;height:48px;border-radius:16px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,rgba(139,92,246,.28),rgba(34,211,238,.12));
+  border:1px solid var(--line2);
+  box-shadow:0 0 28px rgba(139,92,246,.22),inset 0 1px 0 rgba(255,255,255,.12);
+}
+.brand-mark svg{width:25px;height:25px}
+.brand h1{font-size:16px;letter-spacing:.08em}
+.brand small{display:block;color:var(--muted);margin-top:3px;font-size:11px;letter-spacing:.14em}
+
+.back{
+  display:inline-flex;align-items:center;gap:8px;
+  color:#e9ebf7;text-decoration:none;
+  padding:11px 15px;border-radius:13px;
+  background:rgba(255,255,255,.045);
+  border:1px solid var(--line);
+  transition:.3s;
+}
+.back:hover{
+  transform:translateY(-2px);
+  border-color:rgba(139,92,246,.42);
+  box-shadow:0 0 28px rgba(139,92,246,.16);
+}
+
+/* HERO */
+.hero{
+  position:relative;overflow:hidden;
+  padding:32px;
+  border-radius:28px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025)),
+    linear-gradient(145deg,rgba(10,13,27,.86),rgba(8,10,20,.67));
+  border:1px solid var(--line);
+  box-shadow:0 28px 90px rgba(0,0,0,.44),inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(24px);
+  animation:enter .8s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero:before{
+  content:"";position:absolute;left:8%;right:8%;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--violet),var(--cyan),transparent);
+  box-shadow:0 0 20px rgba(139,92,246,.75);
+  animation:pulseLine 3s ease-in-out infinite;
+}
+.hero:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 22%,rgba(255,255,255,.055) 44%,transparent 63%);
+  transform:translateX(-120%);animation:sweep 8s ease-in-out infinite;
+}
+@keyframes pulseLine{50%{opacity:.4}}
+@keyframes sweep{0%,62%,100%{transform:translateX(-120%)}76%{transform:translateX(120%)}}
+@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  color:#c8c0ff;font-size:11px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 15px rgba(52,211,153,.9);
+  animation:dot 1.8s ease-in-out infinite;
+}
+@keyframes dot{50%{transform:scale(1.45);opacity:.55}}
+.hero h2{
+  font-size:clamp(28px,5vw,48px);
+  line-height:1.05;letter-spacing:-.045em;
+  max-width:760px;
+}
+.hero h2 span{
+  background:linear-gradient(90deg,#fff,var(--cyan),#c4b5fd);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{
+  margin-top:13px;max-width:690px;color:var(--muted);
+  line-height:1.7;font-size:14px;
+}
+
+/* SEARCH */
+.tools{
+  display:flex;align-items:center;gap:12px;margin:22px 0;
+}
+.search{
+  flex:1;position:relative;
+}
+.search input{
+  width:100%;height:52px;padding:0 18px 0 48px;
+  border-radius:16px;border:1px solid var(--line);
+  outline:none;color:var(--text);background:rgba(255,255,255,.045);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  transition:.3s;
+}
+.search input:focus{
+  border-color:rgba(139,92,246,.55);
+  box-shadow:0 0 0 4px rgba(139,92,246,.08),0 0 28px rgba(139,92,246,.12);
+}
+.search svg{
+  position:absolute;left:17px;top:16px;width:20px;color:#8993ad;
+}
+.notify{
+  width:52px;height:52px;border-radius:16px;
+  border:1px solid var(--line);background:rgba(255,255,255,.045);
+  color:white;position:relative;display:grid;place-items:center;
+  transition:.3s;
+}
+.notify:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(139,92,246,.2)}
+.badge{
+  position:absolute;right:8px;top:7px;width:8px;height:8px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 14px rgba(236,72,153,.85);
+  animation:badge 1.8s ease-in-out infinite;
+}
+@keyframes badge{50%{transform:scale(1.35)}}
+
+/* CATEGORY */
+.section-head{
+  display:flex;align-items:end;justify-content:space-between;gap:12px;
+  margin:28px 0 14px;
+}
+.section-head h3{font-size:18px}
+.section-head span{font-size:12px;color:var(--muted)}
+
+.categories{display:flex;gap:9px;flex-wrap:wrap}
+.cat{
+  border:1px solid var(--line);color:#cbd1e4;background:rgba(255,255,255,.035);
+  padding:9px 13px;border-radius:999px;font-size:12px;transition:.3s;
+}
+.cat:hover,.cat.active{
+  color:white;border-color:rgba(139,92,246,.48);
+  background:rgba(139,92,246,.13);
+  box-shadow:0 0 22px rgba(139,92,246,.13);
+}
+
+/* SERVICE CARDS */
+.grid-services{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+}
+.card{
+  position:relative;overflow:hidden;
+  min-height:230px;padding:22px;border-radius:22px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.065),rgba(255,255,255,.018)),
+    rgba(10,13,25,.72);
+  border:1px solid var(--line);
+  box-shadow:0 20px 55px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.065);
+  backdrop-filter:blur(18px);
+  transform-style:preserve-3d;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s;
+  animation:cardIn .7s both;
+}
+.card:nth-child(2){animation-delay:.05s}.card:nth-child(3){animation-delay:.1s}
+.card:nth-child(4){animation-delay:.15s}.card:nth-child(5){animation-delay:.2s}
+.card:nth-child(6){animation-delay:.25s}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.card:before{
+  content:"";position:absolute;width:170px;height:170px;border-radius:50%;
+  right:-70px;top:-80px;background:var(--glow);
+  filter:blur(45px);opacity:.48;transition:.5s;
+}
+.card:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.045) 48%,transparent 66%);
+  transform:translateX(-130%);transition:.8s;
+}
+.card:hover{
+  transform:translateY(-8px) rotateX(1deg);
+  border-color:rgba(255,255,255,.18);
+  box-shadow:0 30px 70px rgba(0,0,0,.46),0 0 38px var(--shadow);
+}
+.card:hover:before{opacity:.82;transform:scale(1.3)}
+.card:hover:after{transform:translateX(130%)}
+
+.icon{
+  width:54px;height:54px;border-radius:17px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.11);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 28px rgba(0,0,0,.24);
+  margin-bottom:18px;
+  position:relative;z-index:1;
+  transition:.4s;
+}
+.card:hover .icon{transform:translateY(-3px) scale(1.06) rotate(-3deg)}
+.icon svg{width:25px;height:25px}
+
+.card h4{font-size:17px;position:relative;z-index:1}
+.card p{
+  color:var(--muted);font-size:12px;line-height:1.65;
+  margin:8px 0 17px;min-height:40px;position:relative;z-index:1;
+}
+.request{
+  width:100%;height:40px;border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;color:#fff;background:rgba(255,255,255,.045);
+  position:relative;z-index:1;transition:.3s;
+}
+.request:hover{
+  background:linear-gradient(90deg,rgba(139,92,246,.20),rgba(34,211,238,.12));
+  border-color:rgba(139,92,246,.42);
+  box-shadow:0 0 22px rgba(139,92,246,.14);
+}
+
+
+/* ===== PREMIUM SERVICE POPUP + QUANTITY ===== */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px;
+  background:rgba(1,2,7,.72);backdrop-filter:blur(18px);
+  opacity:0;visibility:hidden;transition:.32s ease;
+}
+.modal-backdrop.show{opacity:1;visibility:visible}
+.service-modal{
+  width:min(480px,100%);position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);border-radius:28px;padding:26px;
+  background:linear-gradient(145deg,rgba(20,23,44,.96),rgba(7,9,19,.96));
+  box-shadow:0 35px 100px rgba(0,0,0,.68),0 0 60px rgba(139,92,246,.16),inset 0 1px 0 rgba(255,255,255,.10);
+  transform:translateY(22px) scale(.94);transition:.38s cubic-bezier(.2,.8,.2,1);
+}
+.modal-backdrop.show .service-modal{transform:none}
+.service-modal:before{
+  content:"";position:absolute;left:10%;right:10%;top:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--violet),var(--cyan),var(--pink),transparent);
+  box-shadow:0 0 22px rgba(139,92,246,.7);
+}
+.modal-close{
+  position:absolute;right:16px;top:14px;width:38px;height:38px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);color:#fff;font-size:21px;
+  transition:.25s;z-index:2;
+}
+.modal-close:hover{transform:rotate(90deg);background:rgba(236,72,153,.12);border-color:rgba(236,72,153,.3)}
+.modal-kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a7a0ff;font-weight:800;margin-bottom:8px}
+.modal-title{font-size:24px;line-height:1.15;font-weight:800;padding-right:45px}
+.modal-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-top:8px}
+.price-row{
+  margin:20px 0 16px;padding:15px 16px;border-radius:18px;
+  background:linear-gradient(100deg,rgba(139,92,246,.12),rgba(34,211,238,.06));
+  border:1px solid rgba(139,92,246,.18);display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.price-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.unit-price{font-size:18px;font-weight:800;margin-top:3px}
+.total-price{text-align:right}.total-price small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.1em}.total-price strong{font-size:25px;background:linear-gradient(90deg,#fff,#67e8f9,#c4b5fd);-webkit-background-clip:text;background-clip:text;color:transparent}
+.qty-box{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:14px 0 20px}
+.qty-label{font-size:13px;font-weight:700}.qty-label span{display:block;color:var(--muted);font-size:10px;font-weight:500;margin-top:3px}
+.stepper{display:flex;align-items:center;gap:8px;padding:5px;border-radius:15px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10)}
+.stepper button{width:39px;height:39px;border-radius:11px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.055);color:#fff;font-size:22px;font-weight:700;transition:.22s}
+.stepper button:hover{background:linear-gradient(135deg,rgba(139,92,246,.35),rgba(34,211,238,.16));border-color:rgba(139,92,246,.45);box-shadow:0 0 18px rgba(139,92,246,.15)}
+.stepper button:active{transform:scale(.9)}
+#qtyValue{min-width:32px;text-align:center;font-size:18px;font-weight:800}
+.confirm-service{width:100%;height:48px;border:1px solid rgba(139,92,246,.38);border-radius:15px;color:#fff;font-weight:800;letter-spacing:.02em;background:linear-gradient(100deg,#6d3eea,#167fbe 58%,#8b3c9e);box-shadow:0 12px 35px rgba(92,55,220,.25),inset 0 1px 0 rgba(255,255,255,.18);position:relative;overflow:hidden;transition:.3s}
+.confirm-service:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.23) 48%,transparent 70%);transform:translateX(-120%);animation:confirmSweep 3.5s ease-in-out infinite}
+@keyframes confirmSweep{0%,58%,100%{transform:translateX(-120%)}72%{transform:translateX(120%)}}
+.confirm-service:hover{transform:translateY(-2px);box-shadow:0 16px 42px rgba(92,55,220,.36),0 0 26px rgba(34,211,238,.10)}
+.confirm-service span{position:relative;z-index:1}
+.popup-note{text-align:center;color:#6f7891;font-size:10px;margin-top:10px}
+@media(max-width:520px){.service-modal{padding:23px 18px;border-radius:24px}.modal-title{font-size:21px}.qty-box{align-items:flex-start;flex-direction:column}.stepper{align-self:stretch;justify-content:center}}
+
+/* EMPTY */
+.empty{
+  display:none;text-align:center;padding:45px 20px;color:var(--muted);
+  border:1px dashed var(--line);border-radius:22px;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;right:20px;bottom:20px;z-index:50;
+  width:min(360px,calc(100% - 40px));
+  padding:15px 16px;border-radius:16px;
+  background:rgba(10,13,25,.88);border:1px solid var(--line2);
+  box-shadow:0 25px 70px rgba(0,0,0,.55),0 0 30px rgba(139,92,246,.12);
+  backdrop-filter:blur(20px);
+  opacity:0;transform:translateY(15px);pointer-events:none;
+  transition:.35s;
+}
+.toast.show{opacity:1;transform:none}
+.toast strong{display:block;font-size:13px;margin-bottom:4px}
+.toast span{font-size:12px;color:var(--muted)}
+
+footer{
+  text-align:center;color:#6f7891;font-size:11px;
+  margin-top:34px;letter-spacing:.04em;
+  text-shadow:0 0 18px rgba(139,92,246,.14);
+}
+
+@media(max-width:900px){.grid-services{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){
+  .wrap{width:min(94%,1180px);padding-top:18px}
+  .topbar{align-items:flex-start}
+  .brand h1{font-size:13px}
+  .brand-mark{width:43px;height:43px;border-radius:14px}
+  .hero{padding:25px 20px;border-radius:22px}
+  .hero h2{font-size:31px}
+  .tools{gap:8px}
+  .grid-services{grid-template-columns:1fr}
+  .card{min-height:215px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+
+<style>
+/* ===== SERVICES — SIGNATURE PREMIUM V2 ===== */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+:root{
+  --premium-violet:#8b5cf6;
+  --premium-cyan:#22d3ee;
+  --premium-pink:#f472b6;
+  --premium-blue:#60a5fa;
+  --premium-white:#f8fafc;
+  --premium-muted:#98a3bc;
+}
+
+/* More premium typography */
+body{
+  font-family:"DM Sans",Inter,ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.005em;
+}
+h1,h2,h3,h4,.brand,.eyebrow,.cat,.request{
+  font-family:"Manrope","DM Sans",sans-serif;
+}
+h1{font-weight:800}
+h2{font-weight:800}
+h3,h4{font-weight:700}
+
+/* Film-grain / texture layer */
+.bg:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  mix-blend-mode:screen;
+}
+
+/* Header logo breathing glow */
+.brand-mark{
+  position:relative;
+  animation:logoBreath 3.8s ease-in-out infinite;
+}
+.brand-mark:after{
+  content:"";
+  position:absolute;
+  inset:-7px;
+  border-radius:20px;
+  border:1px solid rgba(139,92,246,.18);
+  animation:logoRing 3.8s ease-in-out infinite;
+}
+@keyframes logoBreath{
+  0%,100%{box-shadow:0 0 24px rgba(139,92,246,.18),inset 0 1px 0 rgba(255,255,255,.12)}
+  50%{box-shadow:0 0 42px rgba(139,92,246,.36),0 0 70px rgba(34,211,238,.08),inset 0 1px 0 rgba(255,255,255,.16)}
+}
+@keyframes logoRing{
+  50%{transform:scale(1.08);opacity:.28}
+}
+
+/* Hero title shimmer */
+.hero h2 span{
+  background-size:220% 100%;
+  animation:titleShimmer 5s linear infinite;
+}
+@keyframes titleShimmer{
+  0%{background-position:200% 50%}
+  100%{background-position:-20% 50%}
+}
+
+/* Search bar richer focus/idle glow */
+.search:before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:17px;
+  background:linear-gradient(90deg,rgba(139,92,246,.22),transparent 35%,rgba(34,211,238,.16),transparent 72%);
+  opacity:.55;
+  filter:blur(10px);
+  pointer-events:none;
+}
+.search input{
+  position:relative;
+  z-index:1;
+}
+
+/* Category buttons feel more tactile */
+.cat{
+  position:relative;
+  overflow:hidden;
+  font-weight:700;
+  letter-spacing:.01em;
+}
+.cat:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.09) 48%,transparent 67%);
+  transform:translateX(-130%);
+  transition:transform .65s ease;
+}
+.cat:hover:before,.cat.active:before{transform:translateX(130%)}
+.cat.active{
+  box-shadow:0 0 24px rgba(139,92,246,.17),inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Cards: animated border + premium depth */
+.card{
+  border-color:rgba(255,255,255,.085);
+}
+.card:hover{
+  border-color:rgba(255,255,255,.21);
+}
+.card:before{
+  animation:cardGlow 5s ease-in-out infinite;
+}
+.card:nth-child(2):before{animation-delay:-.8s}
+.card:nth-child(3):before{animation-delay:-1.6s}
+.card:nth-child(4):before{animation-delay:-2.4s}
+.card:nth-child(5):before{animation-delay:-3.2s}
+.card:nth-child(6):before{animation-delay:-4s}
+@keyframes cardGlow{
+  0%,100%{opacity:.38;transform:scale(.95)}
+  50%{opacity:.70;transform:scale(1.16)}
+}
+
+/* Service icon has a rotating halo, not the icon itself */
+.icon{
+  overflow:visible;
+}
+.icon:after{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.07);
+  opacity:.65;
+  transform:rotate(0deg);
+  transition:.5s;
+}
+.card:hover .icon:after{
+  transform:rotate(8deg) scale(1.07);
+  border-color:rgba(139,92,246,.22);
+  box-shadow:0 0 22px rgba(139,92,246,.13);
+}
+
+/* Request buttons become high-value CTA buttons */
+.request{
+  font-weight:800;
+  letter-spacing:.025em;
+  background:
+    linear-gradient(105deg,rgba(139,92,246,.19),rgba(34,211,238,.08)),
+    rgba(255,255,255,.035);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 8px 20px rgba(0,0,0,.15);
+  overflow:hidden;
+}
+.request:before{
+  content:"";
+  position:absolute;
+  top:0;bottom:0;left:-45%;
+  width:35%;
+  transform:skewX(-20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.20),transparent);
+  transition:left .65s ease;
+}
+.request:hover:before{left:125%}
+.request:hover{
+  transform:translateY(-1px);
+  color:#fff;
+  border-color:rgba(139,92,246,.48);
+  background:linear-gradient(105deg,rgba(139,92,246,.30),rgba(34,211,238,.14));
+  box-shadow:
+    0 0 0 1px rgba(139,92,246,.06),
+    0 0 28px rgba(139,92,246,.18),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+/* Notification gets a subtle premium ring */
+.notify{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.notify:after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:19px;
+  border:1px solid rgba(139,92,246,.10);
+  animation:notifRing 2.8s ease-in-out infinite;
+}
+@keyframes notifRing{
+  50%{transform:scale(1.06);opacity:.28}
+}
+
+/* Page entrance */
+.topbar{animation:rise .65s .02s both}
+.hero{animation:rise .75s .10s both}
+.tools{animation:rise .75s .18s both}
+.categories{animation:rise .75s .24s both}
+@keyframes rise{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:none}
+}
+
+/* Better touch feedback */
+@media(hover:none){
+  .card:active{transform:scale(.985)}
+  .request:active{transform:scale(.98)}
+  .cat:active{transform:scale(.97)}
+}
+
+/* Slightly more luxurious spacing on larger screens */
+@media(min-width:1000px){
+  .wrap{padding-top:34px}
+  .grid-services{gap:18px}
+  .card{min-height:238px;padding:24px}
+}
+</style>
+
+</head>
+
+<body>
+<div class="bg"><div class="grid"></div></div>
+
+<main class="wrap">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 3 4.5 7.2v9.6L12 21l7.5-4.2V7.2L12 3Z"/>
+          <path d="m8 12 2.4 2.4L16.5 8"/>
+        </svg>
+      </div>
+      <div>
+        <h1>GOPI ONLINE SERVICE</h1>
+        <small>PREMIUM DIGITAL SERVICES</small>
+      </div>
+    </div>
+
+    <a class="back" href="dashboard.html">
+      <span>←</span> Dashboard
+    </a>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow"><span class="live-dot"></span> SERVICE CENTER</div>
+    <h2>Everything you need,<br><span>in one premium place.</span></h2>
+    <p>
+      Explore available online services and choose a service to continue.
+      Your selected service can be sent to the order/request workflow.
+    </p>
+  </section>
+
+  <div class="tools">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m20 20-4-4"></path>
+      </svg>
+      <input id="search" type="search" placeholder="Search services..." autocomplete="off">
+    </div>
+    <button class="notify" type="button" id="notifyBtn" aria-label="Notifications">
+      <span class="badge"></span>
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"></path>
+        <path d="M10 21h4"></path>
+      </svg>
+    </button>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h3>Browse Services</h3>
+      <span id="count">8 services</span>
+    </div>
+
+    <div class="categories">
+      <button class="cat active" data-cat="all">All</button>
+      <button class="cat" data-cat="documents">Documents</button>
+      <button class="cat" data-cat="forms">Forms</button>
+      <button class="cat" data-cat="digital">Digital</button>
+      <button class="cat" data-cat="printing">Print & Photo</button>
+    </div>
+  </section>
+
+  <section class="grid-services" id="services">
+
+    <article class="card" data-category="documents" data-search="pan card pan application correction" style="--glow:rgba(139,92,246,.30);--shadow:rgba(139,92,246,.18)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 8h8M8 12h6M8 16h4"></path></svg></div>
+      <h4>PAN Card</h4><p>Professional assistance for PAN card application and related online work.</p>
+      <button class="request" data-service="PAN Card" data-price="150">₹150 • Request Service</button>
+    </article>
+
+    <article class="card" data-category="documents" data-search="aadhaar aadhar adhar print printout" style="--glow:rgba(34,211,238,.28);--shadow:rgba(34,211,238,.16)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8" cy="12" r="2.2"></circle><path d="M13 10h5M13 14h4"></path></svg></div>
+      <h4>Aadhaar Print</h4><p>Clear, neat Aadhaar print assistance for your required copies.</p>
+      <button class="request" data-service="Aadhaar Print" data-price="50">₹50 • Request Service</button>
+    </article>
+
+    <article class="card" data-category="forms" data-search="online form fill up application form" style="--glow:rgba(236,72,153,.26);--shadow:rgba(236,72,153,.15)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f9a8d4" stroke-width="1.8"><path d="M5 3h14v18H5z"></path><path d="M8 7h8M8 11h8M8 15h5"></path></svg></div>
+      <h4>Online Form Fill Up</h4><p>Assistance with online applications, data entry and form submission.</p>
+      <button class="request" data-service="Online Form Fill Up" data-price="50">₹50 • Request Service</button>
+    </article>
+
+    <article class="card" data-category="documents" data-search="voter card voter apply election id" style="--glow:rgba(245,200,106,.25);--shadow:rgba(245,200,106,.12)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8" cy="11" r="2"></circle><path d="M13 9h5M13 12h5M13 15h3"></path></svg></div>
+      <h4>Voter Card Apply</h4><p>Assistance for online voter card application and submission.</p>
+      <button class="request" data-service="Voter Card Apply" data-price="50">₹50 • Request Service</button>
+    </article>
+
+    <article class="card" data-category="digital" data-search="driving licence license dl driving license" style="--glow:rgba(52,211,153,.25);--shadow:rgba(52,211,153,.12)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="1.8"><path d="M4 12h16M6 12l1.5-5h9L18 12M7 16h.01M17 16h.01"></path><rect x="4" y="9" width="16" height="9" rx="2"></rect><path d="M8 18v2M16 18v2"></path></svg></div>
+      <h4>Driving Licence Service Assistant</h4><p>Online assistance for eligible driving licence related services.</p>
+      <button class="request" data-service="Driving Licence Service Assistant" data-price="1000">₹1000 • Request Service</button>
+    </article>
+
+    <article class="card" data-category="forms" data-search="income certificate panchayat bdo certificate" style="--glow:rgba(99,102,241,.28);--shadow:rgba(99,102,241,.15)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="1.8"><path d="M6 3h12v18H6z"></path><path d="M9 7h6M9 11h6M9 15h3"></path><path d="m15 17 2 2 4-5"></path></svg></div>
+      <h4>Income Certificate — Panchayat / BDO</h4><p>Assistance with eligible income certificate application through the relevant route.</p>
+      <button class="request" data-service="Income Certificate — Panchayat / BDO" data-price="50">₹50 • Request Service</button>
+    </article>
+
+    <article class="card" data-category="forms" data-search="domicile residence certificate apply" style="--glow:rgba(56,189,248,.28);--shadow:rgba(56,189,248,.15)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" stroke-width="1.8"><path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9M9 20v-6h6v6"></path></svg></div>
+      <h4>Domicile Apply</h4><p>Assistance for eligible domicile / residence certificate application.</p>
+      <button class="request" data-service="Domicile Apply" data-price="50">₹50 • Request Service</button>
+    </article>
+
+    <article class="card" data-category="printing" data-search="photo frame photo with frame passport photo print" style="--glow:rgba(244,114,182,.28);--shadow:rgba(244,114,182,.15)">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f9a8d4" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m5 17 4-4 3 3 2-2 5 5"></path></svg></div>
+      <h4>Photo + Frame</h4><p>Photo service with frame preparation as requested.</p>
+      <button class="request" data-service="Photo + Frame" data-price="250">₹250 • Request Service</button>
+    </article>
+
+  </section>
+
+  <div class="empty" id="empty">No service found. Try another search.</div>
+
+  <footer>© 2026 GOPI ONLINE SERVICE • PREMIUM SERVICE CENTER</footer>
+</main>
+
+
+<div class="modal-backdrop" id="serviceModal" aria-hidden="true">
+  <div class="service-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" type="button" id="closeModal" aria-label="Close">×</button>
+    <div class="modal-kicker">ORDER CUSTOMIZER</div>
+    <div class="modal-title" id="modalTitle">Select service</div>
+    <div class="modal-desc" id="modalDesc">Choose quantity before continuing.</div>
+
+    <div class="price-row">
+      <div><div class="price-label">Unit Price</div><div class="unit-price" id="unitPrice">₹0</div></div>
+      <div class="total-price"><small>Total</small><strong id="totalPrice">₹0</strong></div>
+    </div>
+
+    <div class="qty-box">
+      <div class="qty-label">Quantity<span>Increase or decrease as needed</span></div>
+      <div class="stepper">
+        <button type="button" id="minusQty" aria-label="Decrease quantity">−</button>
+        <span id="qtyValue">1</span>
+        <button type="button" id="plusQty" aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+
+    <button class="confirm-service" type="button" id="confirmService"><span>Continue with this Service →</span></button>
+    <div class="popup-note">Quantity and total are calculated automatically.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <strong id="toastTitle">Service selected</strong>
+  <span id="toastText">Your selected service is ready for the next step.</span>
+</div>
+
+<script type="module">
+import { supabase } from "./supabase.js";
+
+const serviceCards = [...document.querySelectorAll(".card")];
+const search = document.getElementById("search");
+const count = document.getElementById("count");
+const empty = document.getElementById("empty");
+let activeCategory = "all";
+
+function refresh(){
+  const q = search.value.trim().toLowerCase();
+  let visible = 0;
+
+  serviceCards.forEach(card => {
+    const matchesCategory = activeCategory === "all" || card.dataset.category === activeCategory;
+    const matchesSearch = !q || (card.dataset.search || "").toLowerCase().includes(q);
+    const show = matchesCategory && matchesSearch;
+    card.style.display = show ? "" : "block";
+    if(show) visible++;
+    if(!show) card.style.display = "none";
+  });
+
+  count.textContent = `${visible} service${visible === 1 ? "" : "s"}`;
+  empty.style.display = visible ? "none" : "block";
+}
+
+document.querySelectorAll(".cat").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".cat").forEach(x => x.classList.remove("active"));
+    btn.classList.add("active");
+    activeCategory = btn.dataset.cat;
+    refresh();
+  });
+});
+
+search.addEventListener("input", refresh);
+
+function toast(title, text){
+  document.getElementById("toastTitle").textContent = title;
+  document.getElementById("toastText").textContent = text;
+  const el = document.getElementById("toast");
+  el.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.classList.remove("show"), 3200);
+}
+
+const modal = document.getElementById("serviceModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalDesc = document.getElementById("modalDesc");
+const unitPrice = document.getElementById("unitPrice");
+const totalPrice = document.getElementById("totalPrice");
+const qtyValue = document.getElementById("qtyValue");
+let selectedService = "";
+let selectedPrice = 0;
+let quantity = 1;
+
+function updateOrderTotal(){
+  qtyValue.textContent = quantity;
+  totalPrice.textContent = `₹${selectedPrice * quantity}`;
+}
+function openServiceModal(service, price){
+  selectedService = service;
+  selectedPrice = Number(price) || 0;
+  quantity = 1;
+  modalTitle.textContent = service;
+  modalDesc.textContent = "Set the quantity you need, then continue to the order page.";
+  unitPrice.textContent = `₹${selectedPrice}`;
+  updateOrderTotal();
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+function closeServiceModal(){
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+}
+
+document.querySelectorAll(".request").forEach(btn => {
+  btn.addEventListener("click", () => openServiceModal(btn.dataset.service, btn.dataset.price));
+});
+document.getElementById("minusQty").addEventListener("click", () => {
+  if(quantity > 1){ quantity--; updateOrderTotal(); }
+});
+document.getElementById("plusQty").addEventListener("click", () => {
+  if(quantity < 99){ quantity++; updateOrderTotal(); }
+});
+document.getElementById("closeModal").addEventListener("click", closeServiceModal);
+modal.addEventListener("click", e => { if(e.target === modal) closeServiceModal(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && modal.classList.contains("show")) closeServiceModal(); });
+document.getElementById("confirmService").addEventListener("click", () => {
+  sessionStorage.setItem("selected_service", selectedService);
+  sessionStorage.setItem("selected_service_price", String(selectedPrice));
+  sessionStorage.setItem("selected_service_quantity", String(quantity));
+  sessionStorage.setItem("selected_service_total", String(selectedPrice * quantity));
+  window.location.href = "payment.html?service=" + encodeURIComponent(selectedService) + "&price=" + selectedPrice + "&quantity=" + quantity + "&total=" + (selectedPrice * quantity);
+});
+
+document.getElementById("notifyBtn").addEventListener("click", () => {
+  toast("Notifications", "No new notifications right now.");
+});
+
+async function protectPage(){
+  const { data } = await supabase.auth.getSession();
+  if(!data.session){
+    window.location.href = "index.html";
+    return;
+  }
+}
+protectPage();
+refresh();
+</script>
+</body>
+</html>
