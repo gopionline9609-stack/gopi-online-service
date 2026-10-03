@@ -1245,6 +1245,10 @@ body::after{
 
     position:absolute;
 
+    pointer-events:none;
+
+    position:absolute;
+
     top:0;
     left:-120%;
 
@@ -1763,9 +1767,8 @@ button{
                 <button
                     type="button"
                     class="type-btn active"
-                    id="emailType"
-                    onclick="emailLogin()">
-
+                    id="emailType">
+                    
                     ✉ Email / Gmail
 
                 </button>
@@ -1773,8 +1776,8 @@ button{
                 <button
                     type="button"
                     class="type-btn"
-                    id="phoneType"
-                    onclick="phoneLogin()">
+                    id="phoneType">
+                   
 
                     📱 Mobile Number
 
@@ -1806,8 +1809,8 @@ button{
                 <button
                     type="button"
                     class="main-btn"
-                    id="sendOtpBtn"
-                    onclick="sendEmailOTP()">
+                    id="sendOtpBtn">
+                    
 
                     Send OTP
 
@@ -1841,8 +1844,8 @@ button{
                 <button
                     type="button"
                     class="main-btn"
-                    id="verifyOtpBtn"
-                    onclick="verifyEmailOTP()">
+                    id="verifyOtpBtn">
+                   
 
                     Verify OTP
 
@@ -1895,7 +1898,6 @@ button{
                     <button
                         type="button"
                         class="password-toggle"
-                        onclick="togglePassword('loginPassword', this)"
                         aria-label="Show password">
 
                         👁
@@ -1914,10 +1916,8 @@ button{
             <button
                 type="button"
                 class="main-btn"
-                onclick="passwordLoginNotice()">
-
+                id="loginSecurelyBtn">
                 Login Securely
-
             </button>
 
         </div>
@@ -2024,7 +2024,6 @@ button{
                     <button
                         type="button"
                         class="password-toggle"
-                        onclick="togglePassword('registerPassword', this)"
                         aria-label="Show password">
 
                         👁
@@ -2073,8 +2072,7 @@ button{
                 <button
                     type="button"
                     class="main-btn"
-                    id="verifyRegisterBtn"
-                    onclick="verifyRegisterOTP()">
+                    id="verifyRegisterBtn">
 
                     Verify Email OTP
 
@@ -2083,8 +2081,7 @@ button{
                 <button
                     type="button"
                     class="main-btn"
-                    id="resendRegisterBtn"
-                    onclick="resendRegisterOTP()">
+                    id="resendRegisterBtn">
 
                     Resend OTP
 
@@ -3236,15 +3233,36 @@ function initializeUI(){
     const registerTab =
         document.getElementById("registerTab");
 
+    const emailType =
+        document.getElementById("emailType");
+
+    const phoneType =
+        document.getElementById("phoneType");
+
+    const sendOtpBtn =
+        document.getElementById("sendOtpBtn");
+
+    const verifyOtpBtn =
+        document.getElementById("verifyOtpBtn");
+
     const createAccountBtn =
         document.getElementById("createAccountBtn");
 
-    const loginOtp =
-        document.getElementById("emailOTP");
+    const verifyRegisterBtn =
+        document.getElementById("verifyRegisterBtn");
 
-    const registerOtp =
-        document.getElementById("registerOTP");
+    const resendRegisterBtn =
+        document.getElementById("resendRegisterBtn");
 
+    const loginPasswordToggle =
+        document.querySelector(
+            '#loginForm .password-toggle'
+        );
+
+    const registerPasswordToggle =
+        document.querySelector(
+            '#registerForm .password-toggle'
+        );
 
     /* LOGIN / REGISTER */
 
@@ -3257,25 +3275,104 @@ function initializeUI(){
     }
 
 
-    /* CREATE ACCOUNT */
+    /* EMAIL / PHONE */
 
-    if(createAccountBtn){
-        createAccountBtn.onclick = registerUser;
+    if(emailType){
+        emailType.onclick = emailLogin;
+    }
+
+    if(phoneType){
+        phoneType.onclick = phoneLogin;
     }
 
 
     /* LOGIN OTP */
 
+    if(sendOtpBtn){
+        sendOtpBtn.onclick = sendEmailOTP;
+    }
+
+    if(verifyOtpBtn){
+        verifyOtpBtn.onclick = verifyEmailOTP;
+    }
+
+
+    /* REGISTER */
+
+    if(createAccountBtn){
+        createAccountBtn.onclick = registerUser;
+    }
+
+    if(verifyRegisterBtn){
+        verifyRegisterBtn.onclick =
+            verifyRegisterOTP;
+    }
+
+    if(resendRegisterBtn){
+        resendRegisterBtn.onclick =
+            resendRegisterOTP;
+    }
+
+
+    /* PASSWORD TOGGLE */
+
+    if(loginPasswordToggle){
+
+        loginPasswordToggle.onclick = function(){
+
+            togglePassword(
+                "loginPassword",
+                this
+            );
+
+        };
+
+    }
+
+    if(registerPasswordToggle){
+
+        registerPasswordToggle.onclick = function(){
+
+            togglePassword(
+                "registerPassword",
+                this
+            );
+
+        };
+
+    }
+
+
+    /* LOGIN SECURELY */
+
+    const passwordLoginBtn =
+        document.querySelector(
+            '#loginForm .main-btn:last-child'
+        );
+
+    if(passwordLoginBtn){
+
+        passwordLoginBtn.onclick =
+            passwordLoginNotice;
+
+    }
+
+
+    /* LOGIN OTP AUTO VERIFY */
+
+    const loginOtp =
+        document.getElementById("emailOTP");
+
     if(loginOtp){
 
-        loginOtp.oninput = () => {
+        loginOtp.oninput = function(){
 
-            loginOtp.value =
-                loginOtp.value
+            this.value =
+                this.value
                     .replace(/\D/g,"")
                     .slice(0,6);
 
-            if(loginOtp.value.length === 6){
+            if(this.value.length === 6){
 
                 setTimeout(
                     verifyEmailOTP,
@@ -3291,12 +3388,15 @@ function initializeUI(){
 
     /* REGISTER OTP */
 
+    const registerOtp =
+        document.getElementById("registerOTP");
+
     if(registerOtp){
 
-        registerOtp.oninput = () => {
+        registerOtp.oninput = function(){
 
-            registerOtp.value =
-                registerOtp.value
+            this.value =
+                this.value
                     .replace(/\D/g,"")
                     .slice(0,6);
 
