@@ -2718,6 +2718,7 @@ async function sendEmailOTP(){
                     shouldCreateUser:true
                 }
 
+
             });
 
 
@@ -3226,6 +3227,8 @@ window.phoneLogin =
 /* =========================================================
    TAB EVENTS
 ========================================================= */
+document.getElementById("loginTab").onclick = showLogin;
+document.getElementById("registerTab").onclick = showRegister;
 
 document.addEventListener(
     "DOMContentLoaded",
