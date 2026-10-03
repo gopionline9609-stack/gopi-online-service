@@ -3225,150 +3225,141 @@ window.phoneLogin =
 
 
 /* =========================================================
-   TAB EVENTS
+   UI EVENT INITIALIZATION
 ========================================================= */
-document.getElementById("loginTab").onclick = showLogin;
-document.getElementById("registerTab").onclick = showRegister;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+function initializeUI(){
 
-        const loginTab =
-            document.getElementById(
-                "loginTab"
-            );
+    const loginTab =
+        document.getElementById("loginTab");
 
-        const registerTab =
-            document.getElementById(
-                "registerTab"
-            );
+    const registerTab =
+        document.getElementById("registerTab");
 
+    const createAccountBtn =
+        document.getElementById("createAccountBtn");
 
-        loginTab.addEventListener(
-            "click",
-            showLogin
-        );
+    const loginOtp =
+        document.getElementById("emailOTP");
+
+    const registerOtp =
+        document.getElementById("registerOTP");
 
 
-        registerTab.addEventListener(
-            "click",
-            showRegister
-        );
+    /* LOGIN / REGISTER */
+
+    if(loginTab){
+        loginTab.onclick = showLogin;
+    }
+
+    if(registerTab){
+        registerTab.onclick = showRegister;
+    }
 
 
-        const createAccountBtn =
-            document.getElementById(
-                "createAccountBtn"
-            );
+    /* CREATE ACCOUNT */
+
+    if(createAccountBtn){
+        createAccountBtn.onclick = registerUser;
+    }
 
 
-        createAccountBtn.addEventListener(
-            "click",
-            registerUser
-        );
+    /* LOGIN OTP */
 
+    if(loginOtp){
 
-        /* OTP auto verify when 6 digits */
+        loginOtp.oninput = () => {
 
-        const loginOtp =
-            document.getElementById(
-                "emailOTP"
-            );
+            loginOtp.value =
+                loginOtp.value
+                    .replace(/\D/g,"")
+                    .slice(0,6);
 
+            if(loginOtp.value.length === 6){
 
-        loginOtp.addEventListener(
-            "input",
-            () => {
-
-                loginOtp.value =
-                    loginOtp.value
-                        .replace(/\D/g,"")
-                        .slice(0,6);
-
-                if(
-                    loginOtp.value.length === 6
-                ){
-
-                    setTimeout(
-                        verifyEmailOTP,
-                        180
-                    );
-                }
+                setTimeout(
+                    verifyEmailOTP,
+                    180
+                );
 
             }
-        );
 
-
-        const registerOtp =
-            document.getElementById(
-                "registerOTP"
-            );
-
-
-        registerOtp.addEventListener(
-            "input",
-            () => {
-
-                registerOtp.value =
-                    registerOtp.value
-                        .replace(/\D/g,"")
-                        .slice(0,6);
-
-            }
-        );
-
-
-        /* Enter key */
-
-        document.addEventListener(
-            "keydown",
-            (event) => {
-
-                if(
-                    event.key !== "Enter"
-                ) return;
-
-
-                const active =
-                    document.activeElement;
-
-
-                if(
-                    active ===
-                    document.getElementById(
-                        "loginEmail"
-                    )
-                ){
-
-                    sendEmailOTP();
-
-                }else if(
-                    active ===
-                    document.getElementById(
-                        "emailOTP"
-                    )
-                ){
-
-                    verifyEmailOTP();
-
-                }else if(
-                    active ===
-                    document.getElementById(
-                        "registerOTP"
-                    )
-                ){
-
-                    verifyRegisterOTP();
-
-                }
-
-            }
-        );
+        };
 
     }
-);
 
+
+    /* REGISTER OTP */
+
+    if(registerOtp){
+
+        registerOtp.oninput = () => {
+
+            registerOtp.value =
+                registerOtp.value
+                    .replace(/\D/g,"")
+                    .slice(0,6);
+
+        };
+
+    }
+
+}
+
+
+/* ENTER KEY */
+
+document.onkeydown = (event) => {
+
+    if(event.key !== "Enter") return;
+
+    const active =
+        document.activeElement;
+
+
+    if(
+        active ===
+        document.getElementById("loginEmail")
+    ){
+
+        sendEmailOTP();
+
+    }
+
+    else if(
+        active ===
+        document.getElementById("emailOTP")
+    ){
+
+        verifyEmailOTP();
+
+    }
+
+    else if(
+        active ===
+        document.getElementById("registerOTP")
+    ){
+
+        verifyRegisterOTP();
+
+    }
+
+};
+
+
+/* INITIALIZE NOW */
+
+initializeUI();
+
+
+/* ALSO RE-INITIALIZE AFTER PAGE RESTORE */
+
+window.addEventListener(
+    "pageshow",
+    () => {
+        initializeUI();
+    }
+);
 
 /* =========================================================
    MOUSE PARALLAX
