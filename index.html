@@ -2133,7 +2133,34 @@ button{
 
 <script type="module">
 
+/* =========================================================
+   GOPI ONLINE SERVICE
+   AUTHENTICATION SCRIPT
+   Flow preserved:
+   Login → Email OTP → Verify → Dashboard/Admin
+   Register → Create Account → Email OTP → Login
+========================================================= */
+
 import { supabase } from "./supabase.js";
+
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let loginOtpVerifying = false;
+let registerOtpVerifying = false;
+
+
+/* =========================================================
+   HELPER: GET ELEMENT
+========================================================= */
+
+function get(id){
+
+    return document.getElementById(id);
+
+}
 
 
 /* =========================================================
@@ -2141,46 +2168,65 @@ import { supabase } from "./supabase.js";
 ========================================================= */
 
 const particleContainer =
-    document.getElementById("particles");
+    get("particles");
+
 
 function createParticles(){
+
+    if(!particleContainer) return;
+
 
     const count =
         window.innerWidth < 600
         ? 18
         : 34;
 
+
+    particleContainer.innerHTML = "";
+
+
     for(let i = 0; i < count; i++){
 
         const particle =
             document.createElement("span");
 
+
         particle.className =
             "particle";
+
 
         particle.style.left =
             Math.random() * 100 + "%";
 
+
         particle.style.animationDuration =
             (7 + Math.random() * 9) + "s";
+
 
         particle.style.animationDelay =
             (-Math.random() * 12) + "s";
 
+
         const size =
             1 + Math.random() * 2.5;
+
 
         particle.style.width =
             size + "px";
 
+
         particle.style.height =
             size + "px";
+
 
         particleContainer.appendChild(
             particle
         );
+
     }
+
 }
+
 
 createParticles();
 
@@ -2196,38 +2242,63 @@ function showToast(
 ){
 
     const container =
-        document.getElementById(
-            "toastContainer"
-        );
+        get("toastContainer");
+
+
+    if(!container){
+
+        alert(message);
+
+        return;
+    }
+
 
     const toast =
         document.createElement("div");
 
+
     toast.className =
         "toast " + type;
+
 
     const icon =
         type === "success"
         ? "✓"
-        : "!"
+        : "!";
 
-    toast.innerHTML = `
 
-        <div class="toast-icon">
-            ${icon}
-        </div>
+    const iconBox =
+        document.createElement("div");
 
-        <div>
-            ${message}
-        </div>
 
-    `;
+    iconBox.className =
+        "toast-icon";
+
+
+    iconBox.textContent =
+        icon;
+
+
+    const textBox =
+        document.createElement("div");
+
+
+    textBox.textContent =
+        message;
+
+
+    toast.appendChild(iconBox);
+
+    toast.appendChild(textBox);
+
 
     container.appendChild(toast);
+
 
     setTimeout(() => {
 
         toast.classList.add("hide");
+
 
         setTimeout(() => {
 
@@ -2236,6 +2307,7 @@ function showToast(
         }, 300);
 
     }, duration);
+
 }
 
 
@@ -2251,63 +2323,124 @@ function setButtonLoading(
 
     if(!button) return;
 
+
     if(loading){
 
-        button.dataset.originalText =
-            button.textContent;
+        if(
+            !button.dataset.originalText
+        ){
+
+            button.dataset.originalText =
+                button.textContent.trim();
+
+        }
+
+
+        button.disabled = true;
+
 
         button.textContent =
             loadingText;
 
-        button.classList.add("loading");
+
+        button.classList.add(
+            "loading"
+        );
+
 
     }else{
+
+        button.disabled = false;
+
 
         button.textContent =
             button.dataset.originalText ||
             button.textContent;
 
-        button.classList.remove("loading");
+
+        button.classList.remove(
+            "loading"
+        );
+
     }
+
 }
 
 
 /* =========================================================
-   REGISTER
+   RESET BUTTONS
+   Prevents stuck/loading buttons after page restore
+========================================================= */
+
+function resetButtons(){
+
+    document
+        .querySelectorAll(".main-btn")
+        .forEach(button => {
+
+            button.disabled = false;
+
+            button.classList.remove(
+                "loading"
+            );
+
+
+            if(
+                button.dataset.originalText
+            ){
+
+                button.textContent =
+                    button.dataset.originalText;
+
+            }
+
+        });
+
+}
+
+
+/* =========================================================
+   REGISTER USER
 ========================================================= */
 
 async function registerUser(){
 
     const button =
-        document.getElementById(
-            "createAccountBtn"
-        );
+        get("createAccountBtn");
+
 
     const name =
-        document
-            .getElementById("registerName")
-            .value
-            .trim();
+        get("registerName")
+        ?.value
+        .trim();
+
 
     const email =
-        document
-            .getElementById("registerEmail")
-            .value
-            .trim();
+        get("registerEmail")
+        ?.value
+        .trim()
+        .toLowerCase();
+
 
     const phone =
-        document
-            .getElementById("registerPhone")
-            .value
-            .trim();
+        get("registerPhone")
+        ?.value
+        .trim();
+
 
     const password =
-        document
-            .getElementById("registerPassword")
-            .value;
+        get("registerPassword")
+        ?.value;
 
 
-    if(!name || !email || !phone || !password){
+    /* ---------- VALIDATION ---------- */
+
+    if(
+        !name ||
+        !email ||
+        !phone ||
+        !password
+    ){
 
         showToast(
             "Please fill all fields.",
@@ -2318,7 +2451,23 @@ async function registerUser(){
     }
 
 
-    if(!/^\d{10}$/.test(phone)){
+    if(
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email)
+    ){
+
+        showToast(
+            "Please enter a valid email address.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(
+        !/^\d{10}$/.test(phone)
+    ){
 
         showToast(
             "Please enter a valid 10-digit mobile number.",
@@ -2349,20 +2498,31 @@ async function registerUser(){
         );
 
 
-        const { data, error } =
-            await supabase.auth.signUp({
+        /* ---------- SUPABASE SIGN UP ---------- */
 
-                email:email,
+        const {
+            data,
+            error
+        } =
+        await supabase.auth.signUp({
 
-                password:password,
+            email: email,
 
-                options:{
-                    data:{
-                        full_name:name
-                    }
+            password: password,
+
+            options: {
+
+                data: {
+
+                    full_name: name,
+
+                    phone: phone
+
                 }
 
-            });
+            }
+
+        });
 
 
         if(error){
@@ -2377,10 +2537,13 @@ async function registerUser(){
         }
 
 
+        /* ---------- SAVE REGISTER DATA ---------- */
+
         sessionStorage.setItem(
             "register_email",
             email
         );
+
 
         sessionStorage.setItem(
             "register_name",
@@ -2388,18 +2551,36 @@ async function registerUser(){
         );
 
 
-        document
-            .getElementById(
-                "registerOTPBox"
-            )
-            .classList.remove("hidden");
+        sessionStorage.setItem(
+            "register_phone",
+            phone
+        );
 
 
-        document
-            .getElementById(
-                "registerOTP"
-            )
-            .focus();
+        /* ---------- SHOW OTP BOX ---------- */
+
+        const otpBox =
+            get("registerOTPBox");
+
+
+        if(otpBox){
+
+            otpBox.classList.remove(
+                "hidden"
+            );
+
+        }
+
+
+        const otpInput =
+            get("registerOTP");
+
+
+        if(otpInput){
+
+            otpInput.focus();
+
+        }
 
 
         showToast(
@@ -2409,15 +2590,21 @@ async function registerUser(){
         );
 
 
-    }catch(err){
+    }catch(error){
 
-        console.error(err);
+        console.error(
+            "Registration error:",
+            error
+        );
+
 
         showToast(
-            err.message ||
-            "Something went wrong.",
-            "error"
+            error?.message ||
+            "Something went wrong during registration.",
+            "error",
+            5000
         );
+
 
     }finally{
 
@@ -2425,7 +2612,9 @@ async function registerUser(){
             button,
             false
         );
+
     }
+
 }
 
 
@@ -2435,30 +2624,33 @@ async function registerUser(){
 
 async function verifyRegisterOTP(){
 
+    if(registerOtpVerifying){
+
+        return;
+    }
+
+
     const button =
-        document.getElementById(
-            "verifyRegisterBtn"
-        );
+        get("verifyRegisterBtn");
+
 
     const email =
         sessionStorage.getItem(
             "register_email"
         ) ||
-        document
-            .getElementById(
-                "registerEmail"
-            )
-            .value
-            .trim();
+        get("registerEmail")
+        ?.value
+        .trim()
+        .toLowerCase();
+
 
     const otp =
-        document
-            .getElementById(
-                "registerOTP"
-            )
-            .value
-            .trim();
+        get("registerOTP")
+        ?.value
+        .trim();
 
+
+    /* ---------- VALIDATION ---------- */
 
     if(!email){
 
@@ -2471,7 +2663,7 @@ async function verifyRegisterOTP(){
     }
 
 
-    if(!/^\d{6}$/.test(otp)){
+    if(!/^\d{6}$/.test(otp || "")){
 
         showToast(
             "Please enter the 6-digit OTP.",
@@ -2484,6 +2676,9 @@ async function verifyRegisterOTP(){
 
     try{
 
+        registerOtpVerifying = true;
+
+
         setButtonLoading(
             button,
             true,
@@ -2491,16 +2686,21 @@ async function verifyRegisterOTP(){
         );
 
 
-        const { data, error } =
-            await supabase.auth.verifyOtp({
+        /* ---------- VERIFY ---------- */
 
-                email:email,
+        const {
+            data,
+            error
+        } =
+        await supabase.auth.verifyOtp({
 
-                token:otp,
+            email: email,
 
-                type:"email"
+            token: otp,
 
-            });
+            type: "email"
+
+        });
 
 
         if(error){
@@ -2516,7 +2716,11 @@ async function verifyRegisterOTP(){
         }
 
 
-        if(data.session && data.user){
+        /* ---------- SUCCESS ---------- */
+
+        if(
+            data?.user
+        ){
 
             showToast(
                 "Email verified successfully! Your account is ready.",
@@ -2529,48 +2733,78 @@ async function verifyRegisterOTP(){
                 "register_email"
             );
 
+
             sessionStorage.removeItem(
                 "register_name"
             );
+
+
+            sessionStorage.removeItem(
+                "register_phone"
+            );
+
+
+            const otpBox =
+                get("registerOTPBox");
+
+
+            if(otpBox){
+
+                otpBox.classList.add(
+                    "hidden"
+                );
+
+            }
 
 
             setTimeout(() => {
 
                 showLogin();
 
-                document
-                    .getElementById(
-                        "loginEmail"
-                    )
-                    .value = email;
 
-                document
-                    .getElementById(
-                        "registerOTPBox"
-                    )
-                    .classList.add("hidden");
+                const loginEmail =
+                    get("loginEmail");
 
-            },700);
+
+                if(loginEmail){
+
+                    loginEmail.value =
+                        email;
+
+                }
+
+            }, 700);
 
         }
 
-    }catch(err){
+    }catch(error){
 
-        console.error(err);
-
-        showToast(
-            err.message ||
-            "Verification error.",
-            "error"
+        console.error(
+            "Register OTP error:",
+            error
         );
 
+
+        showToast(
+            error?.message ||
+            "Verification error.",
+            "error",
+            5000
+        );
+
+
     }finally{
+
+        registerOtpVerifying = false;
+
 
         setButtonLoading(
             button,
             false
         );
+
     }
+
 }
 
 
@@ -2581,20 +2815,17 @@ async function verifyRegisterOTP(){
 async function resendRegisterOTP(){
 
     const button =
-        document.getElementById(
-            "resendRegisterBtn"
-        );
+        get("resendRegisterBtn");
+
 
     const email =
         sessionStorage.getItem(
             "register_email"
         ) ||
-        document
-            .getElementById(
-                "registerEmail"
-            )
-            .value
-            .trim();
+        get("registerEmail")
+        ?.value
+        .trim()
+        .toLowerCase();
 
 
     if(!email){
@@ -2617,14 +2848,16 @@ async function resendRegisterOTP(){
         );
 
 
-        const { error } =
-            await supabase.auth.resend({
+        const {
+            error
+        } =
+        await supabase.auth.resend({
 
-                type:"signup",
+            type: "signup",
 
-                email:email
+            email: email
 
-            });
+        });
 
 
         if(error){
@@ -2646,15 +2879,20 @@ async function resendRegisterOTP(){
         );
 
 
-    }catch(err){
+    }catch(error){
 
-        console.error(err);
+        console.error(
+            "Resend OTP error:",
+            error
+        );
+
 
         showToast(
-            err.message ||
+            error?.message ||
             "Something went wrong.",
             "error"
         );
+
 
     }finally{
 
@@ -2662,7 +2900,9 @@ async function resendRegisterOTP(){
             button,
             false
         );
+
     }
+
 }
 
 
@@ -2673,23 +2913,36 @@ async function resendRegisterOTP(){
 async function sendEmailOTP(){
 
     const button =
-        document.getElementById(
-            "sendOtpBtn"
-        );
+        get("sendOtpBtn");
+
 
     const email =
-        document
-            .getElementById(
-                "loginEmail"
-            )
-            .value
-            .trim();
+        get("loginEmail")
+        ?.value
+        .trim()
+        .toLowerCase();
 
+
+    /* ---------- VALIDATION ---------- */
 
     if(!email){
 
         showToast(
             "Please enter your Gmail or Email.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email)
+    ){
+
+        showToast(
+            "Please enter a valid email address.",
             "error"
         );
 
@@ -2706,17 +2959,22 @@ async function sendEmailOTP(){
         );
 
 
-        const { error } =
-            await supabase.auth.signInWithOtp({
+        /* ---------- SUPABASE OTP ---------- */
 
-                email:email,
+        const {
+            error
+        } =
+        await supabase.auth.signInWithOtp({
 
-                options:{
-                    shouldCreateUser:true
-                }
+            email: email,
 
+            options: {
 
-            });
+                shouldCreateUser: true
+
+            }
+
+        });
 
 
         if(error){
@@ -2731,25 +2989,45 @@ async function sendEmailOTP(){
         }
 
 
-        document
-            .getElementById(
-                "emailLoginBox"
-            )
-            .classList.add("hidden");
+        /* ---------- SHOW OTP ---------- */
+
+        const emailBox =
+            get("emailLoginBox");
 
 
-        document
-            .getElementById(
-                "emailOTPBox"
-            )
-            .classList.remove("hidden");
+        const otpBox =
+            get("emailOTPBox");
 
 
-        document
-            .getElementById(
-                "emailOTP"
-            )
-            .focus();
+        if(emailBox){
+
+            emailBox.classList.add(
+                "hidden"
+            );
+
+        }
+
+
+        if(otpBox){
+
+            otpBox.classList.remove(
+                "hidden"
+            );
+
+        }
+
+
+        const otpInput =
+            get("emailOTP");
+
+
+        if(otpInput){
+
+            otpInput.value = "";
+
+            otpInput.focus();
+
+        }
 
 
         showToast(
@@ -2759,15 +3037,21 @@ async function sendEmailOTP(){
         );
 
 
-    }catch(err){
+    }catch(error){
 
-        console.error(err);
+        console.error(
+            "Send login OTP error:",
+            error
+        );
+
 
         showToast(
-            err.message ||
+            error?.message ||
             "Something went wrong.",
-            "error"
+            "error",
+            5000
         );
+
 
     }finally{
 
@@ -2775,7 +3059,9 @@ async function sendEmailOTP(){
             button,
             false
         );
+
     }
+
 }
 
 
@@ -2785,27 +3071,30 @@ async function sendEmailOTP(){
 
 async function verifyEmailOTP(){
 
+    if(loginOtpVerifying){
+
+        return;
+    }
+
+
     const button =
-        document.getElementById(
-            "verifyOtpBtn"
-        );
+        get("verifyOtpBtn");
+
 
     const email =
-        document
-            .getElementById(
-                "loginEmail"
-            )
-            .value
-            .trim();
+        get("loginEmail")
+        ?.value
+        .trim()
+        .toLowerCase();
+
 
     const otp =
-        document
-            .getElementById(
-                "emailOTP"
-            )
-            .value
-            .trim();
+        get("emailOTP")
+        ?.value
+        .trim();
 
+
+    /* ---------- VALIDATION ---------- */
 
     if(!email){
 
@@ -2818,7 +3107,7 @@ async function verifyEmailOTP(){
     }
 
 
-    if(!/^\d{6}$/.test(otp)){
+    if(!/^\d{6}$/.test(otp || "")){
 
         showToast(
             "Please enter the 6-digit OTP.",
@@ -2831,6 +3120,9 @@ async function verifyEmailOTP(){
 
     try{
 
+        loginOtpVerifying = true;
+
+
         setButtonLoading(
             button,
             true,
@@ -2838,16 +3130,21 @@ async function verifyEmailOTP(){
         );
 
 
-        const { data, error } =
-            await supabase.auth.verifyOtp({
+        /* ---------- VERIFY OTP ---------- */
 
-                email:email,
+        const {
+            data,
+            error
+        } =
+        await supabase.auth.verifyOtp({
 
-                token:otp,
+            email: email,
 
-                type:"email"
+            token: otp,
 
-            });
+            type: "email"
+
+        });
 
 
         if(error){
@@ -2863,9 +3160,11 @@ async function verifyEmailOTP(){
         }
 
 
+        /* ---------- CHECK SESSION ---------- */
+
         if(
-            !data.session ||
-            !data.user
+            !data?.session ||
+            !data?.user
         ){
 
             showToast(
@@ -2878,6 +3177,8 @@ async function verifyEmailOTP(){
         }
 
 
+        /* ---------- GET USER EMAIL ---------- */
+
         const loggedInEmail =
             (
                 data.user.email ||
@@ -2887,9 +3188,15 @@ async function verifyEmailOTP(){
             .toLowerCase();
 
 
+        /* ---------- ADMIN EMAIL ---------- */
+
         const adminEmail =
             "gopi742301@gmail.com";
 
+
+        /* =================================================
+           ADMIN
+        ================================================= */
 
         if(
             loggedInEmail ===
@@ -2909,48 +3216,61 @@ async function verifyEmailOTP(){
                     "admin.html"
                 );
 
-            },700);
-
-        }else{
-
-            showToast(
-                "Login verified successfully! Opening Dashboard...",
-                "success",
-                2500
-            );
+            }, 700);
 
 
-            setTimeout(() => {
-
-                window.location.replace(
-                    "dashboard.html"
-                );
-
-            },700);
-
+            return;
         }
 
 
-    }catch(err){
-
-        console.error(
-            "OTP verification error:",
-            err
-        );
+        /* =================================================
+           NORMAL USER
+        ================================================= */
 
         showToast(
-            err.message ||
-            "Something went wrong.",
-            "error"
+            "Login verified successfully! Opening Dashboard...",
+            "success",
+            2500
         );
 
+
+        setTimeout(() => {
+
+            window.location.replace(
+                "dashboard.html"
+            );
+
+        }, 700);
+
+
+    }catch(error){
+
+        console.error(
+            "Login OTP verification error:",
+            error
+        );
+
+
+        showToast(
+            error?.message ||
+            "Something went wrong.",
+            "error",
+            5000
+        );
+
+
     }finally{
+
+        loginOtpVerifying = false;
+
 
         setButtonLoading(
             button,
             false
         );
+
     }
+
 }
 
 
@@ -2964,35 +3284,50 @@ function togglePassword(
 ){
 
     const input =
-        document.getElementById(
-            inputId
-        );
+        get(inputId);
 
 
-    if(input.type === "password"){
+    if(!input || !button){
 
-        input.type = "text";
+        return;
+    }
+
+
+    if(
+        input.type === "password"
+    ){
+
+        input.type =
+            "text";
+
 
         button.textContent =
             "🙈";
+
 
         button.setAttribute(
             "aria-label",
             "Hide password"
         );
 
+
     }else{
 
-        input.type = "password";
+        input.type =
+            "password";
+
 
         button.textContent =
             "👁";
+
 
         button.setAttribute(
             "aria-label",
             "Show password"
         );
+
     }
+
 }
 
 
@@ -3007,172 +3342,272 @@ function passwordLoginNotice(){
         "error",
         5000
     );
+
 }
 
 
 /* =========================================================
-   LOGIN TAB
+   SHOW LOGIN
 ========================================================= */
 
 function showLogin(){
 
     const loginForm =
-        document.getElementById(
-            "loginForm"
-        );
+        get("loginForm");
+
 
     const registerForm =
-        document.getElementById(
-            "registerForm"
-        );
+        get("registerForm");
+
+
+    const loginTab =
+        get("loginTab");
+
+
+    const registerTab =
+        get("registerTab");
+
+
+    if(!loginForm || !registerForm){
+
+        return;
+    }
 
 
     loginForm.classList.remove(
         "hidden"
     );
 
+
     registerForm.classList.add(
         "hidden"
     );
 
 
-    document
-        .getElementById("loginTab")
-        .classList.add("active");
+    if(loginTab){
+
+        loginTab.classList.add(
+            "active"
+        );
+
+    }
 
 
-    document
-        .getElementById("registerTab")
-        .classList.remove("active");
+    if(registerTab){
+
+        registerTab.classList.remove(
+            "active"
+        );
+
+    }
 
 
     setTimeout(() => {
 
-        document
-            .getElementById(
-                "loginEmail"
-            )
-            .focus();
+        const input =
+            get("loginEmail");
 
-    },350);
+
+        if(input){
+
+            input.focus();
+
+        }
+
+    }, 250);
+
 }
 
 
 /* =========================================================
-   REGISTER TAB
+   SHOW REGISTER
 ========================================================= */
 
 function showRegister(){
 
     const loginForm =
-        document.getElementById(
-            "loginForm"
-        );
+        get("loginForm");
+
 
     const registerForm =
-        document.getElementById(
-            "registerForm"
-        );
+        get("registerForm");
+
+
+    const loginTab =
+        get("loginTab");
+
+
+    const registerTab =
+        get("registerTab");
+
+
+    if(!loginForm || !registerForm){
+
+        return;
+    }
 
 
     loginForm.classList.add(
         "hidden"
     );
 
+
     registerForm.classList.remove(
         "hidden"
     );
 
 
-    document
-        .getElementById("loginTab")
-        .classList.remove("active");
+    if(loginTab){
+
+        loginTab.classList.remove(
+            "active"
+        );
+
+    }
 
 
-    document
-        .getElementById("registerTab")
-        .classList.add("active");
+    if(registerTab){
+
+        registerTab.classList.add(
+            "active"
+        );
+
+    }
 
 
     setTimeout(() => {
 
-        document
-            .getElementById(
-                "registerName"
-            )
-            .focus();
+        const input =
+            get("registerName");
 
-    },350);
+
+        if(input){
+
+            input.focus();
+
+        }
+
+    }, 250);
+
 }
 
 
 /* =========================================================
-   EMAIL LOGIN
+   EMAIL LOGIN TYPE
 ========================================================= */
 
 function emailLogin(){
 
-    document
-        .getElementById(
-            "emailLoginBox"
-        )
-        .classList.remove("hidden");
+    const emailBox =
+        get("emailLoginBox");
 
 
-    document
-        .getElementById(
-            "phoneLoginBox"
-        )
-        .classList.add("hidden");
+    const phoneBox =
+        get("phoneLoginBox");
 
 
-    document
-        .getElementById(
-            "emailType"
-        )
-        .classList.add("active");
+    const emailType =
+        get("emailType");
 
 
-    document
-        .getElementById(
-            "phoneType"
-        )
-        .classList.remove("active");
+    const phoneType =
+        get("phoneType");
+
+
+    if(emailBox){
+
+        emailBox.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    if(phoneBox){
+
+        phoneBox.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if(emailType){
+
+        emailType.classList.add(
+            "active"
+        );
+
+    }
+
+
+    if(phoneType){
+
+        phoneType.classList.remove(
+            "active"
+        );
+
+    }
+
 }
 
 
 /* =========================================================
-   PHONE LOGIN
+   PHONE LOGIN TYPE
 ========================================================= */
 
 function phoneLogin(){
 
-    document
-        .getElementById(
-            "emailLoginBox"
-        )
-        .classList.add("hidden");
+    const emailBox =
+        get("emailLoginBox");
 
 
-    document
-        .getElementById(
-            "phoneLoginBox"
-        )
-        .classList.remove("hidden");
+    const phoneBox =
+        get("phoneLoginBox");
 
 
-    document
-        .getElementById(
-            "emailType"
-        )
-        .classList.remove("active");
+    const emailType =
+        get("emailType");
 
 
-    document
-        .getElementById(
-            "phoneType"
-        )
-        .classList.add("active");
+    const phoneType =
+        get("phoneType");
+
+
+    if(emailBox){
+
+        emailBox.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if(phoneBox){
+
+        phoneBox.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    if(emailType){
+
+        emailType.classList.remove(
+            "active"
+        );
+
+    }
+
+
+    if(phoneType){
+
+        phoneType.classList.add(
+            "active"
+        );
+
+    }
 
 
     showToast(
@@ -3180,238 +3615,254 @@ function phoneLogin(){
         "success",
         3500
     );
+
 }
 
 
 /* =========================================================
-   EXPOSE FUNCTIONS
-========================================================= */
-
-window.registerUser =
-    registerUser;
-
-window.verifyRegisterOTP =
-    verifyRegisterOTP;
-
-window.resendRegisterOTP =
-    resendRegisterOTP;
-
-window.sendEmailOTP =
-    sendEmailOTP;
-
-window.verifyEmailOTP =
-    verifyEmailOTP;
-
-window.togglePassword =
-    togglePassword;
-
-window.passwordLoginNotice =
-    passwordLoginNotice;
-
-window.showLogin =
-    showLogin;
-
-window.showRegister =
-    showRegister;
-
-window.emailLogin =
-    emailLogin;
-
-window.phoneLogin =
-    phoneLogin;
-
-
-/* =========================================================
-   UI EVENT INITIALIZATION
+   BIND ALL BUTTON EVENTS
 ========================================================= */
 
 function initializeUI(){
 
+    /* ---------- TABS ---------- */
+
     const loginTab =
-        document.getElementById("loginTab");
+        get("loginTab");
+
 
     const registerTab =
-        document.getElementById("registerTab");
+        get("registerTab");
+
+
+    if(loginTab){
+
+        loginTab.onclick =
+            showLogin;
+
+    }
+
+
+    if(registerTab){
+
+        registerTab.onclick =
+            showRegister;
+
+    }
+
+
+    /* ---------- LOGIN TYPE ---------- */
 
     const emailType =
-        document.getElementById("emailType");
+        get("emailType");
+
 
     const phoneType =
-        document.getElementById("phoneType");
+        get("phoneType");
+
+
+    if(emailType){
+
+        emailType.onclick =
+            emailLogin;
+
+    }
+
+
+    if(phoneType){
+
+        phoneType.onclick =
+            phoneLogin;
+
+    }
+
+
+    /* ---------- LOGIN OTP ---------- */
 
     const sendOtpBtn =
-        document.getElementById("sendOtpBtn");
+        get("sendOtpBtn");
+
 
     const verifyOtpBtn =
-        document.getElementById("verifyOtpBtn");
+        get("verifyOtpBtn");
+
+
+    if(sendOtpBtn){
+
+        sendOtpBtn.onclick =
+            sendEmailOTP;
+
+    }
+
+
+    if(verifyOtpBtn){
+
+        verifyOtpBtn.onclick =
+            verifyEmailOTP;
+
+    }
+
+
+    /* ---------- REGISTER ---------- */
 
     const createAccountBtn =
-        document.getElementById("createAccountBtn");
+        get("createAccountBtn");
+
 
     const verifyRegisterBtn =
-        document.getElementById("verifyRegisterBtn");
+        get("verifyRegisterBtn");
+
 
     const resendRegisterBtn =
-        document.getElementById("resendRegisterBtn");
+        get("resendRegisterBtn");
+
+
+    if(createAccountBtn){
+
+        createAccountBtn.onclick =
+            registerUser;
+
+    }
+
+
+    if(verifyRegisterBtn){
+
+        verifyRegisterBtn.onclick =
+            verifyRegisterOTP;
+
+    }
+
+
+    if(resendRegisterBtn){
+
+        resendRegisterBtn.onclick =
+            resendRegisterOTP;
+
+    }
+
+
+    /* ---------- PASSWORD TOGGLE ---------- */
 
     const loginPasswordToggle =
         document.querySelector(
-            '#loginForm .password-toggle'
+            "#loginForm .password-toggle"
         );
 
-    const registerPasswordToggle =
-        document.querySelector(
-            '#registerForm .password-toggle'
-        );
-
-    /* LOGIN / REGISTER */
-
-    if(loginTab){
-        loginTab.onclick = showLogin;
-    }
-
-    if(registerTab){
-        registerTab.onclick = showRegister;
-    }
-
-
-    /* EMAIL / PHONE */
-
-    if(emailType){
-        emailType.onclick = emailLogin;
-    }
-
-    if(phoneType){
-        phoneType.onclick = phoneLogin;
-    }
-
-
-    /* LOGIN OTP */
-
-    if(sendOtpBtn){
-        sendOtpBtn.onclick = sendEmailOTP;
-    }
-
-    if(verifyOtpBtn){
-        verifyOtpBtn.onclick = verifyEmailOTP;
-    }
-
-
-    /* REGISTER */
-
-    if(createAccountBtn){
-        createAccountBtn.onclick = registerUser;
-    }
-
-    if(verifyRegisterBtn){
-        verifyRegisterBtn.onclick =
-            verifyRegisterOTP;
-    }
-
-    if(resendRegisterBtn){
-        resendRegisterBtn.onclick =
-            resendRegisterOTP;
-    }
-
-
-    /* PASSWORD TOGGLE */
 
     if(loginPasswordToggle){
 
-        loginPasswordToggle.onclick = function(){
+        loginPasswordToggle.onclick =
+            function(){
 
-            togglePassword(
-                "loginPassword",
-                this
-            );
+                togglePassword(
+                    "loginPassword",
+                    this
+                );
 
-        };
+            };
 
     }
+
+
+    const registerPasswordToggle =
+        document.querySelector(
+            "#registerForm .password-toggle"
+        );
+
 
     if(registerPasswordToggle){
 
-        registerPasswordToggle.onclick = function(){
+        registerPasswordToggle.onclick =
+            function(){
 
-            togglePassword(
-                "registerPassword",
-                this
-            );
+                togglePassword(
+                    "registerPassword",
+                    this
+                );
 
-        };
+            };
 
     }
 
 
-    /* LOGIN SECURELY */
+    /* ---------- LOGIN SECURELY ---------- */
 
-    const passwordLoginBtn =
-        document.querySelector(
-            '#loginForm .main-btn:last-child'
+    const loginButtons =
+        document.querySelectorAll(
+            "#loginForm .main-btn"
         );
 
-    if(passwordLoginBtn){
 
-        passwordLoginBtn.onclick =
+    if(loginButtons.length > 0){
+
+        const passwordButton =
+            loginButtons[
+                loginButtons.length - 1
+            ];
+
+
+        passwordButton.onclick =
             passwordLoginNotice;
 
     }
 
 
-    /* LOGIN OTP AUTO VERIFY */
+    /* ---------- LOGIN OTP INPUT ---------- */
 
     const loginOtp =
-        document.getElementById("emailOTP");
+        get("emailOTP");
+
 
     if(loginOtp){
 
-        loginOtp.oninput = function(){
+        loginOtp.oninput =
+            function(){
 
-            this.value =
-                this.value
-                    .replace(/\D/g,"")
-                    .slice(0,6);
+                this.value =
+                    this.value
+                    .replace(/\D/g, "")
+                    .slice(0, 6);
 
-            if(this.value.length === 6){
-
-                setTimeout(
-                    verifyEmailOTP,
-                    180
-                );
-
-            }
-
-        };
+            };
 
     }
 
 
-    /* REGISTER OTP */
+    /* ---------- REGISTER OTP INPUT ---------- */
 
     const registerOtp =
-        document.getElementById("registerOTP");
+        get("registerOTP");
+
 
     if(registerOtp){
 
-        registerOtp.oninput = function(){
+        registerOtp.oninput =
+            function(){
 
-            this.value =
-                this.value
-                    .replace(/\D/g,"")
-                    .slice(0,6);
+                this.value =
+                    this.value
+                    .replace(/\D/g, "")
+                    .slice(0, 6);
 
-        };
+            };
 
     }
 
 }
 
 
-/* ENTER KEY */
+/* =========================================================
+   ENTER KEY SUPPORT
+========================================================= */
 
-document.onkeydown = (event) => {
+document.onkeydown =
+function(event){
 
-    if(event.key !== "Enter") return;
+    if(event.key !== "Enter"){
+
+        return;
+    }
+
 
     const active =
         document.activeElement;
@@ -3419,47 +3870,129 @@ document.onkeydown = (event) => {
 
     if(
         active ===
-        document.getElementById("loginEmail")
+        get("loginEmail")
     ){
+
+        event.preventDefault();
 
         sendEmailOTP();
 
+        return;
     }
 
-    else if(
+
+    if(
         active ===
-        document.getElementById("emailOTP")
+        get("emailOTP")
     ){
+
+        event.preventDefault();
 
         verifyEmailOTP();
 
+        return;
     }
 
-    else if(
+
+    if(
         active ===
-        document.getElementById("registerOTP")
+        get("registerOTP")
     ){
+
+        event.preventDefault();
 
         verifyRegisterOTP();
 
+        return;
     }
 
 };
 
 
-/* INITIALIZE NOW */
+/* =========================================================
+   EXPOSE FUNCTIONS
+   Keeps compatibility with existing inline handlers
+========================================================= */
+
+window.registerUser =
+    registerUser;
+
+
+window.verifyRegisterOTP =
+    verifyRegisterOTP;
+
+
+window.resendRegisterOTP =
+    resendRegisterOTP;
+
+
+window.sendEmailOTP =
+    sendEmailOTP;
+
+
+window.verifyEmailOTP =
+    verifyEmailOTP;
+
+
+window.togglePassword =
+    togglePassword;
+
+
+window.passwordLoginNotice =
+    passwordLoginNotice;
+
+
+window.showLogin =
+    showLogin;
+
+
+window.showRegister =
+    showRegister;
+
+
+window.emailLogin =
+    emailLogin;
+
+
+window.phoneLogin =
+    phoneLogin;
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 initializeUI();
 
 
-/* ALSO RE-INITIALIZE AFTER PAGE RESTORE */
+/* =========================================================
+   PAGE RESTORE
+   Important after logout / browser back-forward cache
+========================================================= */
 
 window.addEventListener(
     "pageshow",
-    () => {
+    function(event){
+
+        resetButtons();
+
         initializeUI();
+
+
+        if(event.persisted){
+
+            /*
+             * Page was restored from browser cache.
+             * Re-bind UI again so buttons remain usable.
+             */
+
+            initializeUI();
+
+        }
+
     }
 );
+
 
 /* =========================================================
    MOUSE PARALLAX
@@ -3467,17 +4000,11 @@ window.addEventListener(
 ========================================================= */
 
 const authCard =
-    document.getElementById(
-        "authCard"
-    );
-
-const mainContainer =
-    document.getElementById(
-        "mainContainer"
-    );
+    get("authCard");
 
 
 if(
+    authCard &&
     window.matchMedia(
         "(pointer:fine)"
     ).matches
@@ -3485,30 +4012,27 @@ if(
 
     document.addEventListener(
         "mousemove",
-        (event) => {
+        function(event){
 
             const x =
                 (
                     event.clientX /
                     window.innerWidth
-                ) - .5;
+                ) - 0.5;
+
 
             const y =
                 (
                     event.clientY /
                     window.innerHeight
-                ) - .5;
+                ) - 0.5;
 
 
-            authCard.style.transform = `
+            authCard.style.transform =
 
-                perspective(1200px)
-
-                rotateX(${(-y * 2.2).toFixed(2)}deg)
-
-                rotateY(${(x * 2.2).toFixed(2)}deg)
-
-            `;
+                `perspective(1200px)
+                 rotateX(${(-y * 2.2).toFixed(2)}deg)
+                 rotateY(${(x * 2.2).toFixed(2)}deg)`;
 
         }
     );
@@ -3516,14 +4040,20 @@ if(
 
     document.addEventListener(
         "mouseleave",
-        () => {
+        function(){
 
             authCard.style.transform =
                 "perspective(1200px) rotateX(0deg) rotateY(0deg)";
 
         }
     );
+
 }
+
+
+/* =========================================================
+   END
+========================================================= */
 
 </script>
 
