@@ -2143,6 +2143,7 @@ button{
 
 let supabase = null;
 let supabaseLoadError = null;
+let supabaseReadyPromise = null;
 
 /*
    Supabase is loaded dynamically so the page UI can still initialize
@@ -2166,15 +2167,23 @@ async function loadSupabase(){
     }
 }
 
-function requireSupabase(){
+async function requireSupabase(){
     if(supabase){
         return true;
     }
 
+    if(!supabaseReadyPromise){
+        supabaseReadyPromise = loadSupabase();
+    }
+
+    const loaded = await supabaseReadyPromise;
+
+    if(loaded && supabase){
+        return true;
+    }
+
     showToast(
-        supabaseLoadError
-            ? "Authentication service could not be loaded. Please refresh the page."
-            : "Authentication service is still loading. Please try again in a moment.",
+        "Authentication service could not be loaded. Please try again.",
         "error",
         4500
     );
@@ -2444,7 +2453,7 @@ function resetButtons(){
 
 async function registerUser(){
 
-    if(!requireSupabase()) return;
+    if(!(await requireSupabase())) return;
 
     const button =
         get("createAccountBtn");
@@ -2665,7 +2674,7 @@ async function registerUser(){
 
 async function verifyRegisterOTP(){
 
-    if(!requireSupabase()) return;
+    if(!(await requireSupabase())) return;
 
     if(registerOtpVerifying){
 
@@ -2857,7 +2866,7 @@ async function verifyRegisterOTP(){
 
 async function resendRegisterOTP(){
 
-    if(!requireSupabase()) return;
+    if(!(await requireSupabase())) return;
 
     const button =
         get("resendRegisterBtn");
@@ -2957,7 +2966,7 @@ async function resendRegisterOTP(){
 
 async function sendEmailOTP(){
 
-    if(!requireSupabase()) return;
+    if(!(await requireSupabase())) return;
 
     const button =
         get("sendOtpBtn");
@@ -3118,7 +3127,7 @@ async function sendEmailOTP(){
 
 async function verifyEmailOTP(){
 
-    if(!requireSupabase()) return;
+    if(!(await requireSupabase())) return;
 
     if(loginOtpVerifying){
 
@@ -4017,7 +4026,7 @@ window.phoneLogin =
 initializeUI();
 
 /* Start authentication service without blocking the UI. */
-loadSupabase();
+supabaseReadyPromise = loadSupabase();
 
 
 /* =========================================================
