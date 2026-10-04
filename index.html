@@ -2141,7 +2141,46 @@ button{
    Register → Create Account → Email OTP → Login
 ========================================================= */
 
-import { supabase } from "./supabase.js";
+let supabase = null;
+let supabaseLoadError = null;
+
+/*
+   Supabase is loaded dynamically so the page UI can still initialize
+   even if the authentication module is temporarily unavailable.
+   This prevents a failed import from making every button appear dead.
+*/
+async function loadSupabase(){
+    try{
+        const module = await import("./supabase.js");
+        supabase = module.supabase;
+
+        if(!supabase){
+            throw new Error("Supabase client export was not found.");
+        }
+
+        return true;
+    }catch(error){
+        supabaseLoadError = error;
+        console.error("Supabase load error:", error);
+        return false;
+    }
+}
+
+function requireSupabase(){
+    if(supabase){
+        return true;
+    }
+
+    showToast(
+        supabaseLoadError
+            ? "Authentication service could not be loaded. Please refresh the page."
+            : "Authentication service is still loading. Please try again in a moment.",
+        "error",
+        4500
+    );
+
+    return false;
+}
 
 
 /* =========================================================
@@ -2405,6 +2444,8 @@ function resetButtons(){
 
 async function registerUser(){
 
+    if(!requireSupabase()) return;
+
     const button =
         get("createAccountBtn");
 
@@ -2624,6 +2665,8 @@ async function registerUser(){
 
 async function verifyRegisterOTP(){
 
+    if(!requireSupabase()) return;
+
     if(registerOtpVerifying){
 
         return;
@@ -2814,6 +2857,8 @@ async function verifyRegisterOTP(){
 
 async function resendRegisterOTP(){
 
+    if(!requireSupabase()) return;
+
     const button =
         get("resendRegisterBtn");
 
@@ -2911,6 +2956,8 @@ async function resendRegisterOTP(){
 ========================================================= */
 
 async function sendEmailOTP(){
+
+    if(!requireSupabase()) return;
 
     const button =
         get("sendOtpBtn");
@@ -3070,6 +3117,8 @@ async function sendEmailOTP(){
 ========================================================= */
 
 async function verifyEmailOTP(){
+
+    if(!requireSupabase()) return;
 
     if(loginOtpVerifying){
 
@@ -3960,9 +4009,15 @@ window.phoneLogin =
 
 /* =========================================================
    INITIALIZE
+   UI is initialized BEFORE Supabase loading so tabs/buttons
+   never become completely unresponsive because of an auth
+   module loading problem.
 ========================================================= */
 
 initializeUI();
+
+/* Start authentication service without blocking the UI. */
+loadSupabase();
 
 
 /* =========================================================
